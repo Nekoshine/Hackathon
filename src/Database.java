@@ -9,14 +9,14 @@ public class Database {
 	private static Connection connexion;
 
 	private Database() {
-		getConnexion();
+		connexion = getConnection();
 	}
 
-	public static Connection getConnexion() {
+	public static Connection getConnection() {
 		if (connexion == null) {
 			try {
 				System.out.println("Initialising connection to Database");
-				Database.connexion = DriverManager.getConnection("jdbc:mariadb://localhost","unZgwZdVHJ", "9QMg89jteB");
+				Database.connexion = DriverManager.getConnection("jdbc:mysql://localhost","unZgwZdVHJ", "9QMg89jteB");
 				System.out.println("Connection to Hostel Database complete");
 				return connexion;
 			} catch (SQLException e) {
