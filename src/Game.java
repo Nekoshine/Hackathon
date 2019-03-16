@@ -4,6 +4,22 @@ public class Game {
     private double health;
     private int turn;
 
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public void setHealth(double health) {
+        this.health = health;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public double getHealth() {
+        return health;
+    }
+
     public Game() {
         money = 50;
         health = 50;
