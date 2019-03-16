@@ -13,10 +13,16 @@ public class Database {
 	}
 
 	public static Connection getConnexion() {
+		try {
+		 Class.forName("com.mysql.jdbc.Driver");
+	 } catch(ClassNotFoundException e) {
+			 System.err.println("Unable to load MySQL Driver " + e.getMessage());
+		 e.printStackTrace();
+	 }
 		if (connexion == null) {
 			try {
 				System.out.println("Initialising connection to Database");
-				Database.connexion = DriverManager.getConnection("jdbc:mariadb://localhost","unZgwZdVHJ", "9QMg89jteB");
+				Database.connexion = DriverManager.getConnection("jdbc:mysql://remotemysql.com/","unZgwZdVHJ", "9QMg89jteB");
 				System.out.println("Connection to Hostel Database complete");
 				return connexion;
 			} catch (SQLException e) {
@@ -25,5 +31,8 @@ public class Database {
 		}
 		System.out.println("Getting connexion to database...");
 		return connexion;
+	}
+	public static void main(String[] args) {
+		Database.getConnexion();
 	}
 }
