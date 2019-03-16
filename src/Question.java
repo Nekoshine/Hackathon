@@ -1,9 +1,9 @@
 public class Question {
-    protected int id;
-    protected String question;
-    protected Choice rightChoice;
-    protected Choice leftChoice;
-    protected String image;
+    private int id;
+    private String question;
+    private Choice rightChoice;
+    private Choice leftChoice;
+    private String image;
     
     public Question(int id, String question, Choice rightChoice, Choice leftChoice,String image) {
         this.id = id;

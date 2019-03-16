@@ -1,9 +1,8 @@
 public class Game {
-    protected Question currentSituation;
-    protected Categorie categorie;
-    protected double money;
-    protected double health;
-    protected int turn;
+    private Question currentSituation;
+    private double money;
+    private double health;
+    private int turn;
 
     public Game() {
         money = 50;
