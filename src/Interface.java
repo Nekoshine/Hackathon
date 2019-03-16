@@ -6,13 +6,17 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -25,18 +29,13 @@ public class Interface extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        StackPane cardstack = new StackPane();
+        StackPane imagestack = new StackPane();
         StackPane root=new StackPane();
-        GridPane grid=new GridPane();
-        Group choix=new Group();
-        grid.setGridLinesVisible(true);
-        Button textField1 = new Button("a");
-        Button textField2 = new Button("b");
-        Button textField3 = new Button("c");
-        Button textField4 = new Button("d");
-        Button textField5 = new Button("e");
-        Button textField6 = new Button("f");
-
+        VBox grid=new VBox();
+        HBox choix=new HBox();
+        Text question= new Text("Question");
+        Text tgauche= new Text("gauche");
+        Text tdroit= new Text("droit");
 
         try {
             Image imgf = new Image(new FileInputStream("./ressources/images/fond.jpg"));
@@ -54,10 +53,8 @@ public class Interface extends Application {
 
             Image imgchoix = new Image(new FileInputStream("./ressources/images/choix.png"));
             ImageView choixView = new ImageView(imgchoix);
-            grid.setLayoutX(100);
-            grid.setLayoutY(200);
             choix.getChildren().add(choixView);
-            cardstack.getChildren().add(choix);
+            imagestack.getChildren().add(choix);
 
             Scene scene = new Scene(root, 630, 800);
             EventHandler<KeyEvent> swipe=new EventHandler<KeyEvent>() {
@@ -118,15 +115,7 @@ public class Interface extends Application {
             root.minHeightProperty().bind(root.widthProperty().multiply(1));
             root.maxHeightProperty().bind(root.widthProperty().multiply(1));
             scene.addEventHandler(KeyEvent.KEY_PRESSED,swipe);
-            grid.add(textField1,0,0);
-            grid.add(textField2,1,0);
-            grid.add(textField3,2,0);
-            grid.add(gauche,0,1);
-            grid.add(droite,2,1);
-            grid.add(textField6,0,2);
-            grid.add(textField5,1,2);
-            grid.add(textField4,2,2);
-            grid.add(cardstack,1,1);
+
             root.getChildren().add(fond);
             root.getChildren().add(grid);
             primaryStage.setTitle("Hackathon");

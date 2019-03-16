@@ -9,7 +9,7 @@ public class Database {
 	private static Connection connexion;
 
 	private Database() {
-		connexion = getConnection();
+		//connexion = getConnection();
 	}
 
 	public static Connection getConnexion() {
