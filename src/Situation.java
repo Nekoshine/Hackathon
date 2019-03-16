@@ -1,21 +1,24 @@
 public class Situation {
     protected int id;
-    protected String name;
+    protected String question;
     protected Choice rightChoice;
     protected Choice leftChoice;
-
-    public Situation(int id, String name, Choice rightChoice, Choice leftChoice) {
+    protected String image;
+    
+    public Situation(int id, String question, Choice rightChoice, Choice leftChoice,String image) {
         this.id = id;
-        this.name = name;
+        this.question = question;
         this.rightChoice = rightChoice;
         this.leftChoice = leftChoice;
+        this.image = image;
+        
     }
 
     @Override
     public String toString() {
         return "Situation{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", question='" + question + '\'' +
                 ", rightChoice=" + rightChoice +
                 ", leftChoice=" + leftChoice +
                 '}';
@@ -24,13 +27,13 @@ public class Situation {
     public Situation chooseLeft(Game game){
         game.health += leftChoice.healthCost;
         game.money += leftChoice.moneyCost;
-        return leftChoice.nextSituation;
+        return leftChoice.ending;
     }
 
     public Situation chooseRight(Game game){
         game.health += rightChoice.healthCost;
         game.money += rightChoice.moneyCost;
-        return rightChoice.nextSituation;
+        return rightChoice.ending;
     }
 
     public int getId() {
@@ -41,12 +44,12 @@ public class Situation {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String question) {
+        this.question = question;
     }
 
     public Choice getRightChoice() {
