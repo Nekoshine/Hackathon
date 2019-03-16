@@ -1,21 +1,18 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -42,10 +39,19 @@ public class Interface extends Application {
 
 
         try {
+            Image imgf = new Image(new FileInputStream("./ressources/images/fond.jpg"));
+            ImageView fond = new ImageView(imgf);
+            fond.setFitWidth(1600);
+            fond.setFitHeight(1000);
             Image imgg = new Image(new FileInputStream("./ressources/images/gauche.png"));
             ImageView gauche = new ImageView(imgg);
+            gauche.setFitHeight(150);
+            gauche.setFitWidth(220);
             Image imgd = new Image(new FileInputStream("./ressources/images/droite.png"));
             ImageView droite = new ImageView(imgd);
+            droite.setFitHeight(150);
+            droite.setFitWidth(220);
+
             Image imgchoix = new Image(new FileInputStream("./ressources/images/choix.png"));
             ImageView choixView = new ImageView(imgchoix);
             grid.setLayoutX(100);
@@ -53,12 +59,12 @@ public class Interface extends Application {
             choix.getChildren().add(choixView);
             cardstack.getChildren().add(choix);
 
-            Scene scene = new Scene(root, 500, 800);
+            Scene scene = new Scene(root, 630, 800);
             EventHandler<KeyEvent> swipe=new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
                    if(event.getCode()==KeyCode.RIGHT){
-                        Rotate rotation = new Rotate(0, imgchoix.getWidth()/2, imgchoix.getHeight()*2);
+                        Rotate rotation = new Rotate(0, imgchoix.getWidth()/2, imgchoix.getHeight()*2.2);
                         choix.getTransforms().add(rotation);
 
                         Timeline timeline = new Timeline();
@@ -69,7 +75,7 @@ public class Interface extends Application {
                         timeline.play();
                     }
                     if(event.getCode()==KeyCode.LEFT){
-                        Rotate rotation = new Rotate(0, imgchoix.getWidth()/2, imgchoix.getHeight()*2);
+                        Rotate rotation = new Rotate(0, imgchoix.getWidth()/2, imgchoix.getHeight()*2.2);
                         choix.getTransforms().add(rotation);
 
                         Timeline timeline = new Timeline();
@@ -81,7 +87,36 @@ public class Interface extends Application {
                     }
                 }
             };
+            droite.addEventHandler(MouseEvent.MOUSE_CLICKED,new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent event) {
+                    Rotate rotation = new Rotate(0, imgchoix.getWidth()/2, imgchoix.getHeight()*2.2);
+                    choix.getTransforms().add(rotation);
 
+                    Timeline timeline = new Timeline();
+                    timeline.getKeyFrames().addAll(
+                            new KeyFrame(new Duration(800), new KeyValue(rotation.angleProperty(), 90))
+                    );
+                    timeline.setCycleCount(1);
+                    timeline.play();
+                }
+            });
+            gauche.addEventHandler(MouseEvent.MOUSE_CLICKED,new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent event) {
+                    Rotate rotation = new Rotate(0, imgchoix.getWidth()/2, imgchoix.getHeight()*2.2);
+                    choix.getTransforms().add(rotation);
+
+                    Timeline timeline = new Timeline();
+                    timeline.getKeyFrames().addAll(
+                            new KeyFrame(new Duration(800), new KeyValue(rotation.angleProperty(), -90))
+                    );
+                    timeline.setCycleCount(1);
+                    timeline.play();
+                }
+            });
+            root.minHeightProperty().bind(root.widthProperty().multiply(1));
+            root.maxHeightProperty().bind(root.widthProperty().multiply(1));
             scene.addEventHandler(KeyEvent.KEY_PRESSED,swipe);
             grid.add(textField1,0,0);
             grid.add(textField2,1,0);
@@ -92,8 +127,10 @@ public class Interface extends Application {
             grid.add(textField5,1,2);
             grid.add(textField4,2,2);
             grid.add(cardstack,1,1);
+            root.getChildren().add(fond);
             root.getChildren().add(grid);
             primaryStage.setTitle("Hackathon");
+            primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.show();
 
