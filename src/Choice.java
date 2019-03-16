@@ -1,12 +1,10 @@
 public class Choice {
-    protected Situation starting;
-    protected Situation ending;
+    protected Situation nextSituation;
     protected double moneyCost;
     protected double healthCost;
 
-    public Choice(Situation starting, Situation ending, int moneyCost, int healthCost) {
-        this.starting = starting;
-        this.ending = ending;
+    public Choice(Situation nextSituation, int moneyCost, int healthCost) {
+        this.nextSituation = nextSituation;
         this.moneyCost = moneyCost;
         this.healthCost = healthCost;
     }
