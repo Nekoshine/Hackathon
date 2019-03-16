@@ -1,14 +1,14 @@
 public class Carte {
     String question;
-    String reponseoui;
-    String reponsenon;
+    String gauche;
+    String droite;
     String image;
 
-    public Carte(String question,String reponsenon, String reponseoui,String image){
+    public Carte(String question,String gauche, String droite,String image){
         this.image=image;
         this.question=question;
-        this.reponsenon=reponsenon;
-        this.reponseoui=reponseoui;
+        this.droite=droite;
+        this.gauche=gauche;
     }
 
 
