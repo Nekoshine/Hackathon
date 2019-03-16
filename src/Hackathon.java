@@ -1,5 +1,13 @@
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class Hackathon {
     public static void main(String [] args){
-        System.out.println("main");
+        Connection db = Database.getConnection();
+        try {
+            System.out.println(db.getClientInfo());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
