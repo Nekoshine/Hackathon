@@ -24,13 +24,13 @@ public class Situation {
     public Situation chooseLeft(Game game){
         game.health += leftChoice.healthCost;
         game.money += leftChoice.moneyCost;
-        return leftChoice.ending;
+        return leftChoice.nextSituation;
     }
 
     public Situation chooseRight(Game game){
         game.health += rightChoice.healthCost;
         game.money += rightChoice.moneyCost;
-        return rightChoice.ending;
+        return rightChoice.nextSituation;
     }
 
     public int getId() {
