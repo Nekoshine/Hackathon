@@ -3,7 +3,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Database {
@@ -44,7 +43,7 @@ public class Database {
 			ResultSet resultat = requete.executeQuery();
 			resultat.next();
 			int count=resultat.getInt("count(*)");
-			id = rand.nextInt(count);
+			id = rand.nextInt(count)+1;
 			requete.close();
 			resultat.close();
 		} catch (SQLException e) {
@@ -53,20 +52,21 @@ public class Database {
 		return id;
 	}
 
-	public static Carte getCarte(int id,int categorie){
+	public static Situation getSituation(int id,int categorie){
 		try {
 			PreparedStatement requete = Database.getConnexion()
 					.prepareStatement("SELECT * FROM Question WHERE IDQuestion=? and Categorie=?");
-			requete.setInt(1, id);
+			requete.setInt(1, id);	
 			requete.setInt(2, categorie);
 			ResultSet resultat = requete.executeQuery();
-			while (resultat.next()) {
-				Carte carte = new Carte(resultat.getInt("id"), resultat.getString("nom"),
-						resultat.getString("prenom"));
-				return client;
-			}
+			resultat.next();
+			Situation situation = new Situation(resultat.getInt("IDQuestion"), resultat.getString("Texte"),
+						new Choice(resultat.getInt("NextD"),resultat.getInt("ArgentD"),resultat.getInt("VieD")),
+						new Choice(resultat.getInt("NextG"),resultat.getInt("ArgentG"),resultat.getInt("VieG")),
+								resultat.getString("image"));		
 			requete.close();
 			resultat.close();
+			return situation;
 		} catch (SQLException e) {
 			System.err.println("Erreur connexion : " + e.getMessage());
 		}

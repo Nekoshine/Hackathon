@@ -1,7 +1,7 @@
 public class Choice {
     protected int ending;
-    protected double moneyCost;
-    protected double healthCost;
+    protected int moneyCost;
+    protected int healthCost;
 
     public Choice(int ending, int moneyCost, int healthCost) {
         this.ending = ending;

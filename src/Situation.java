@@ -24,13 +24,13 @@ public class Situation {
                 '}';
     }
 
-    public Situation chooseLeft(Game game){
+    public int chooseLeft(Game game){
         game.health += leftChoice.healthCost;
         game.money += leftChoice.moneyCost;
         return leftChoice.ending;
     }
 
-    public Situation chooseRight(Game game){
+    public int chooseRight(Game game){
         game.health += rightChoice.healthCost;
         game.money += rightChoice.moneyCost;
         return rightChoice.ending;
