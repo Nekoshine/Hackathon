@@ -13,27 +13,23 @@ public class Game {
     }
 
     public void chooseLeft(){
-        int nextId = currentSituation.chooseLeft(this);
-        if(nextId==0) {
-            turn++;
-            currentSituation = Database.getSituation(Database.getRandom(turn),turn);
-        } else {
-            currentSituation = Database.getSituation(nextId, 11);
-        }
+        nextSituation(currentSituation.chooseLeft(this));
     }
 
     public void chooseRight(){
-        int nextId = currentSituation.chooseRight(this);
+        nextSituation(currentSituation.chooseRight(this));
+    }
+
+    private void nextSituation(int nextId) {
         if(nextId==0) {
             turn++;
             if(turn>10) {
-                // todo: afficher la fin
-
+                // todo: afficher la fin puis retour au menu principal
+                System.out.println(String.format("money : %f ; health : %f",money,health));
             }
             currentSituation = Database.getSituation(Database.getRandom(turn),turn);
         } else {
             currentSituation = Database.getSituation(nextId, 11);
         }
-
     }
 }
