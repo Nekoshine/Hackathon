@@ -52,18 +52,18 @@ public class Database {
 		return id;
 	}
 
-	public static Situation getSituation(int id,int categorie){
+	public static Question getSituation(int id,int categorie){
 		try {
 			PreparedStatement requete = Database.getConnexion()
 					.prepareStatement("SELECT * FROM Question WHERE IDQuestion=? and Categorie=?");
-			requete.setInt(1, id);	
+			requete.setInt(1, id);
 			requete.setInt(2, categorie);
 			ResultSet resultat = requete.executeQuery();
 			resultat.next();
-			Situation situation = new Situation(resultat.getInt("IDQuestion"), resultat.getString("Texte"),
-						new Choice(resultat.getInt("NextD"),resultat.getInt("ArgentD"),resultat.getInt("VieD")),
-						new Choice(resultat.getInt("NextG"),resultat.getInt("ArgentG"),resultat.getInt("VieG")),
-								resultat.getString("image"));		
+			Question situation = new Question(resultat.getInt("IDQuestion"), resultat.getString("Texte"),
+						new Choice(resultat.getInt("NextD"),resultat.getInt("ArgentD"),resultat.getInt("VieD"),resultat.getString("TextG")),
+						new Choice(resultat.getInt("NextG"),resultat.getInt("ArgentG"),resultat.getInt("VieG"),resultat.getString("TextD")),
+								resultat.getString("image"));
 			requete.close();
 			resultat.close();
 			return situation;

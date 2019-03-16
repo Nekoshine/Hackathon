@@ -1,22 +1,21 @@
-public class Situation {
+public class Question {
     protected int id;
     protected String question;
     protected Choice rightChoice;
     protected Choice leftChoice;
     protected String image;
     
-    public Situation(int id, String question, Choice rightChoice, Choice leftChoice,String image) {
+    public Question(int id, String question, Choice rightChoice, Choice leftChoice,String image) {
         this.id = id;
         this.question = question;
         this.rightChoice = rightChoice;
         this.leftChoice = leftChoice;
         this.image = image;
-        
     }
 
     @Override
     public String toString() {
-        return "Situation{" +
+        return "Question{" +
                 "id=" + id +
                 ", question='" + question + '\'' +
                 ", rightChoice=" + rightChoice +
