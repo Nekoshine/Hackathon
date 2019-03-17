@@ -22,7 +22,7 @@ public class Database {
 		if (connexion == null) {
 			try {
 				System.out.println("Initialising connection to Database");
-				Database.connexion = DriverManager.getConnection("jdbc:mysql://remotemysql.com/","unZgwZdVHJ", "9QMg89jteB");
+				Database.connexion = DriverManager.getConnection("jdbc:mysql://remotemysql.com/unZgwZdVHJ","unZgwZdVHJ", "9QMg89jteB");
 				System.out.println("Connection to Hostel Database complete");
 				return connexion;
 			} catch (SQLException e) {
@@ -61,8 +61,8 @@ public class Database {
 			ResultSet resultat = requete.executeQuery();
 			resultat.next();
 			Question situation = new Question(resultat.getInt("IDQuestion"), resultat.getString("Texte"),
-						new Choice(resultat.getInt("NextD"),resultat.getInt("ArgentD"),resultat.getInt("VieD"),resultat.getString("TextG")),
-						new Choice(resultat.getInt("NextG"),resultat.getInt("ArgentG"),resultat.getInt("VieG"),resultat.getString("TextD")),
+						new Choice(resultat.getInt("NextD"),resultat.getInt("ArgentD"),resultat.getInt("VieD"),resultat.getString("TexteD")),
+						new Choice(resultat.getInt("NextG"),resultat.getInt("ArgentG"),resultat.getInt("VieG"),resultat.getString("TexteG")),
 								resultat.getString("image"));
 			requete.close();
 			resultat.close();

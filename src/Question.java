@@ -24,15 +24,15 @@ public class Question {
     }
 
     public int chooseLeft(Game game){
-        game.health += leftChoice.healthCost;
-        game.money += leftChoice.moneyCost;
-        return leftChoice.ending;
+        game.health += leftChoice.getHealthCost();
+        game.money += leftChoice.getMoneyCost();
+        return leftChoice.getEnding();
     }
 
     public int chooseRight(Game game){
-        game.health += rightChoice.healthCost;
-        game.money += rightChoice.moneyCost;
-        return rightChoice.ending;
+        game.health += rightChoice.getHealthCost();
+        game.money += rightChoice.getMoneyCost();
+        return rightChoice.getEnding();
     }
 
     public int getId() {
