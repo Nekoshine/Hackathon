@@ -264,7 +264,7 @@ public class Interface extends Application {
 		image.setFitWidth(300);
 		image.preserveRatioProperty();
 		question.setText(jeu.getCurrentSituation().getQuestion());
-		tdroite.setText(jeu.getCurrentSituation().rightChoice.getText());
-		tgauche.setText(jeu.getCurrentSituation().leftChoice.getText());
+		tdroite.setText(jeu.getCurrentSituation().getRightChoice().getText());
+		tgauche.setText(jeu.getCurrentSituation().getLeftChoice().getText());
 	}
 }

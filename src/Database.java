@@ -118,4 +118,29 @@ public class Database {
 		}
 		return false;
 	}
+
+	public static boolean insertQuestion(Question question) {
+			try {
+				PreparedStatement requete = Database.getConnexion()
+						.prepareStatement("INSERT INTO `Question`(`Texte`, `ArgentG`, `VieG`, `Image`, `TexteG`, `TexteD`, `Categorie`, `ArgentD`, `VieD`, `NextD`, `NextG`) "
+								+ "VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+				requete.setString(1, question.getQuestion());	
+				requete.setInt(2, question.getLeftChoice().getMoneyCost());
+				requete.setInt(3, question.getLeftChoice().getHealthCost());
+				requete.setString(4, question.getImage());
+				requete.setString(5, question.getLeftChoice().getText());
+				requete.setString(6, question.getRightChoice().getText());
+				requete.setInt(7, question.getCategorie());
+				requete.setInt(8, question.getRightChoice().getMoneyCost());
+				requete.setInt(9, question.getRightChoice().getHealthCost());
+				requete.setInt(10, question.getRightChoice().getEnding());
+				requete.setInt(11, question.getLeftChoice().getEnding());
+				requete.executeUpdate();
+				requete.close();
+				return true;
+			} catch (SQLException e) {
+				System.err.println("Erreur connexion : " + e.getMessage());
+			}
+			return false;
+		}
 }
