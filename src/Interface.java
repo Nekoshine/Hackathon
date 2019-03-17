@@ -192,7 +192,7 @@ public class Interface extends Application {
 		moveUp.setPrefWidth(200);
 
 		Button commit = new Button("Commit");
-        Button exit=new Button("retour");
+        Button exit=new Button("Retour");
         exit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
