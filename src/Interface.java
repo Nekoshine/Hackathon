@@ -30,6 +30,8 @@ public class Interface extends Application {
     private Text question;
     private Game jeu;
     private GridPane choix;
+    private Text tgauche;
+    private Text tdroite;
     @Override
     public void start(Stage primaryStage) {
         jeu=new Game();
@@ -39,11 +41,11 @@ public class Interface extends Application {
         question= new Text("example of a situation that require multiple line to be printed");
         question.setWrappingWidth(600);
         question.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-        Text tgauche= new Text("gauche");
+        tgauche= new Text("gauche");
         tgauche.setTextAlignment(TextAlignment.CENTER);
         tgauche.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         tgauche.setWrappingWidth(200);
-        Text tdroite= new Text("droite");
+        tdroite= new Text("droite");
         tdroite.setTextAlignment(TextAlignment.CENTER);
         tdroite.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
         tdroite.setWrappingWidth(200);
@@ -69,12 +71,12 @@ public class Interface extends Application {
                 @Override
                 public void handle(KeyEvent event) {
                    if(event.getCode()==KeyCode.RIGHT){
-
+                        jeu.chooseRight();
                         animationdroite();
 
                     }
                     if(event.getCode()==KeyCode.LEFT){
-
+                        jeu.chooseLeft();
                         animationgauche();
 
                     }
@@ -83,13 +85,14 @@ public class Interface extends Application {
             droite.addEventHandler(MouseEvent.MOUSE_CLICKED,new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
-
+                    jeu.chooseRight();
                     animationdroite();
                 }
             });
             gauche.addEventHandler(MouseEvent.MOUSE_CLICKED,new EventHandler<MouseEvent>(){
                 @Override
                 public void handle(MouseEvent event) {
+                    jeu.chooseLeft();
                     animationgauche();
                 }
             });
@@ -98,7 +101,7 @@ public class Interface extends Application {
 
             root.getChildren().add(fond);
             question.setTextAlignment(TextAlignment.CENTER);
-            choix.setHgap(50);
+            choix.setHgap(5);
             choix.setVgap(50);
             choix.add(gauche,0,0);
             choix.add(droite,2,0);
@@ -166,13 +169,17 @@ public class Interface extends Application {
     private void actualiserSituation(){
 
         try {
-            imagesituation = new Image(new FileInputStream("./ressources/images/"+"choix.png"));
+            imagesituation = new Image(new FileInputStream("./ressources/images/"+jeu.currentSituation.image));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         System.out.println(jeu.currentSituation.question);
         image = new ImageView(imagesituation);
-       // question.setText(jeu.currentSituation.question);
+        image.setFitWidth(300);
+        image.preserveRatioProperty();
+        question.setText(jeu.currentSituation.question);
+        tdroite.setText(jeu.currentSituation.rightChoice.getText());
+        tgauche.setText(jeu.currentSituation.leftChoice.getText());
     }
 
     public static void main(String[] args) {
