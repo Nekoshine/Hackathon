@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
@@ -49,13 +50,10 @@ public class Interface extends Application {
 	private Boolean lean;
 	private boolean libre;
 	private Stage primaryStage;
-
 	@Override
 	public void start(Stage primaryStage) {
        	this.primaryStage=primaryStage;
-
-		createStory();
-/*
+//		ecranfin();
 		libre=true;
 		StackPane root=new StackPane();
 		root.setAlignment(Pos.CENTER);
@@ -69,6 +67,9 @@ public class Interface extends Application {
 		gage.setAlignment(Pos.CENTER);
 		gradio.setSpacing(50);
 		gradio.setAlignment(Pos.CENTER);
+		Text erreur=new Text("");
+		erreur.setFont(Font.font("verdana", FontWeight.NORMAL, FontPosture.REGULAR, 20));
+		erreur.setFill(Color.RED);
 		Text tage=new Text("Veuillez entrer votre age");
 		tage.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		Text tnom=new Text("Nom d'utilisateur");
@@ -99,20 +100,51 @@ public class Interface extends Application {
 			public void handle(ActionEvent event) {
 				start.click();
 				Scanner scan =new Scanner(age.getText());
-				if(scan.hasNextInt() && !nom.getText().isEmpty()) {
-                    ToggleButton a = (ToggleButton) toggleGroup.getSelectedToggle();
-                    player = new Player(nom.getText(), scan.nextInt(), a.getText());
-                    System.out.println(player.getPseudo() + "  " + player.getAge() + "  " + player.getSexe());
-                    scan.close();
-                    //jouer();
-                    //jouer(primaryStage);
-					choisirHistoire();
-                }
+				if(!nom.getText().isEmpty()) {
+					if (scan.hasNextInt()) {
+						int nb=scan.nextInt();
+						if(nb>0){
+							ToggleButton a = (ToggleButton) toggleGroup.getSelectedToggle();
+							player = new Player(nom.getText(), nb, a.getText());
+							System.out.println(player.getPseudo() + "  " + player.getAge() + "  " + player.getSexe());
+							choisirHistoire();
+						}else {
+							erreur.setText("veuillez saisir un nombre positif pour votre age ");
+						}
+						scan.close();
+					} else {
+						erreur.setText("veuillez saisir un nombre positif pour votre age ");
+					}
+				}
+				else {
+					erreur.setText("veuillez saisir votre nom ");
+				}
 			}
 		});
 		col.setSpacing(50);
 		col.setAlignment(Pos.CENTER);
-		col.getChildren().addAll(gnom,gradio,gage,start);
+        Button hist=new Button("creer une histoire");
+        hist.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                hist.click();
+                createStory();
+            }
+        });
+        hist.setPrefSize(300,50);
+        HBox buttons=new HBox();
+        buttons.setSpacing(100);
+        buttons.getChildren().addAll(hist,start);
+        buttons.setAlignment(Pos.CENTER);
+        Button exit=new Button("exit");
+        exit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                exit.click();
+                exit();
+            }
+        });
+		col.getChildren().addAll(gnom,gradio,gage,buttons,exit,erreur);
 		try {
 			Image imgf = new Image(new FileInputStream("./ressources/images/fond.png"));
 			ImageView fond = new ImageView(imgf);
@@ -127,7 +159,7 @@ public class Interface extends Application {
 		root.getChildren().add(col);
 		Scene scene = new Scene(root,750,800);
 		primaryStage.setScene(scene);
-		primaryStage.show();*/
+		primaryStage.show();
 	}
 
 	public void createStory() {
@@ -135,7 +167,7 @@ public class Interface extends Application {
 		root.setAlignment(Pos.CENTER);
 
 		Label labelTitle = new Label("Remplisser votre histoire (10 questions) :");
-
+        labelTitle.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 
 		ObservableList<QuestionTmp> storiesL = FXCollections.observableArrayList(Database.getQuestionsName());
 		ListView<QuestionTmp> lviewLeft = new ListView<>(storiesL);
@@ -160,14 +192,24 @@ public class Interface extends Application {
 		moveUp.setPrefWidth(200);
 
 		Button commit = new Button("Commit");
+        Button exit=new Button("retour");
+        exit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                exit.click();
+               start(primaryStage);
+            }
+        });
 
 		TextField nameBox = new TextField();
 		nameBox.setPrefWidth(100);
-
+        nameBox.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		Label label = new Label("Nom de l'histoire : ");
+        label.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 
 
 		toRight.setOnAction(event -> {
+		    toRight.click();
 			if(lviewRight.getItems().size()<10) {
 				int index = lviewLeft.getSelectionModel().getSelectedIndex();
 				lviewRight.getItems().add(lviewLeft.getItems().remove(index));
@@ -176,19 +218,22 @@ public class Interface extends Application {
 		});
 
 		toLeft.setOnAction(event -> {
+            toLeft.click();
 			if(lviewRight.getItems().size()>0) {
 				lviewLeft.getItems().add(lviewRight.getItems().remove(lviewRight.getSelectionModel().getSelectedIndex()));
 			}
 		});
 
 		allLeft.setOnAction(event -> {
+            allLeft.click();
 			while(lviewRight.getItems().size()>0) {
 				lviewLeft.getItems().add(lviewRight.getItems().remove(0));
 			}
 		});
 
 		moveUp.setOnAction(event -> {
-			QuestionTmp tmp = lviewRight.getSelectionModel().getSelectedItem();
+            moveUp.click();
+            QuestionTmp tmp = lviewRight.getSelectionModel().getSelectedItem();
 			int index = lviewRight.getSelectionModel().getSelectedIndex();
 			if (index>0){
 				lviewRight.getItems().remove(index);
@@ -198,7 +243,8 @@ public class Interface extends Application {
 		});
 
 		moveDown.setOnAction(event -> {
-			QuestionTmp tmp = lviewRight.getSelectionModel().getSelectedItem();
+            moveDown.click();
+            QuestionTmp tmp = lviewRight.getSelectionModel().getSelectedItem();
 			int index = lviewRight.getSelectionModel().getSelectedIndex();
 			if (index<lviewRight.getItems().size()-1){
 				lviewRight.getItems().remove(index);
@@ -209,13 +255,14 @@ public class Interface extends Application {
 
 
 		commit.setOnAction(event -> {
-			if(lviewRight.getItems().size()==10 && nameBox.getCharacters().length()>0) {
-				String story = "";
-				for (QuestionTmp questionTmp : lviewRight.getItems()) {
-					story = story.concat(questionTmp.id+",");
-				}
-				Database.insertStory(new Story(nameBox.getCharacters().toString(),story.substring(0,story.length()-1)));
-			}
+            if(lviewRight.getItems().size()==10 && nameBox.getCharacters().length()>0) {
+                String story = "";
+                for (QuestionTmp questionTmp : lviewRight.getItems()) {
+                    story = story.concat(questionTmp.id+",");
+                }
+                Database.insertStory(new Story(nameBox.getCharacters().toString(),story.substring(0,story.length()-1)));
+            }
+
 		});
 
 
@@ -249,20 +296,34 @@ public class Interface extends Application {
 		grid.add(label,1,6);
 		grid.add(nameBox,2,6);
 		grid.add(commit, 4, 6);
-
+        grid.add(exit, 5, 6);
+        try {
+            Image imgf = new Image(new FileInputStream("./ressources/images/fond.png"));
+            ImageView fond = new ImageView(imgf);
+            fond.setFitWidth(1600);
+            fond.setFitHeight(1000);
+            root.getChildren().add(fond);
+        }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
 		root.getChildren().add(grid);
 		Scene scene = new Scene(root, 1200, 800);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
+
+
 	public void choisirHistoire() {
+        libre = true;
         StackPane root = new StackPane();
         root.setAlignment(Pos.CENTER);
         Label labelTitle = new Label("Choisisser votre histoire :");
         ArrayList<String> storiesName = Database.getStoriesName();
         ObservableList<String> stories = FXCollections.observableArrayList(storiesName);
         ListView<String> lview = new ListView<>(stories);
+
         lview.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         lview.getSelectionModel().selectFirst();
         Button start = new Button("Start");
@@ -465,12 +526,12 @@ public class Interface extends Application {
 		StackPane root=new StackPane();
         VBox col=new VBox();
         col.setAlignment(Pos.CENTER);
-        Text mes=new Text("Merci d'avoir joué");
+        Text mes=new Text("Merci d'avoir joue");
 		mes.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		Text score=new Text("Votre score est de : argent= "+player.getMoneyEnd()+"   bonheur= "+player.getHealthEnd());
 		score.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		HBox buttons=new HBox();
-		buttons.setSpacing(150);
+		buttons.setSpacing(50);
 		buttons.setAlignment(Pos.CENTER);
 		Button exit=new Button("exit");
 		exit.setOnAction(new EventHandler<ActionEvent>() {
@@ -480,6 +541,14 @@ public class Interface extends Application {
 				exit();
 			}
 		});
+        Button hist=new Button("creer une histoire");
+        hist.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                hist.click();
+                createStory();
+            }
+        });
 
 		Button rejouer=new Button("rejouer");
 		rejouer.setOnAction(new EventHandler<ActionEvent>() {
@@ -502,7 +571,7 @@ public class Interface extends Application {
 		Scene scene = new Scene(root,750,800);
 		primaryStage.setScene(scene);
 		col.setSpacing(50);
-		buttons.getChildren().addAll(rejouer,exit);
+		buttons.getChildren().addAll(rejouer,hist,exit);
 		col.getChildren().addAll(mes,score,buttons);
 		root.getChildren().add(col);
 	}
