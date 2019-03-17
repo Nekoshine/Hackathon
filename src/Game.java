@@ -17,15 +17,21 @@ public class Game {
 
     private int turn;
     private Player player;
+    private Story story;
 
-	public Game(Player nplayer) {
+	public Game(Player nplayer, Story nstory) {
         money = 50;
         health = 50;
         turn=1;
+        story = nstory;
         player = nplayer;
         player.setMoneyStrt(money);
         player.setHealthStrt(health);
-        currentSituation = Database.getSituation(Database.getRandom(turn),turn);
+        if(story.getNumQuestion(turn) == 0) {
+            currentSituation = Database.getSituation(Database.getRandom(turn), turn);
+        } else {
+            currentSituation = Database.getSituation(story.getNumQuestion(turn), turn);
+        }
     }
 
     public int getMoney() {
@@ -53,7 +59,6 @@ public class Game {
     }
 
     private void nextSituation(int nextId) {
-        System.out.println("-->"+nextId+"  "+turn);
         if(nextId==0) {
             turn++;
             if (isEnded()) {
@@ -72,7 +77,11 @@ public class Game {
 
 
                 }
-                currentSituation = Database.getSituation(Database.getRandom(turn), turn);
+                if(story.getNumQuestion(turn) == 0) {
+                    currentSituation = Database.getSituation(Database.getRandom(turn), turn);
+                } else {
+                    currentSituation = Database.getSituation(story.getNumQuestion(turn), turn);
+                }
             }
         } else {
             currentSituation = Database.getSituation(nextId, 11);

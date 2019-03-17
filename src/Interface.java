@@ -34,6 +34,7 @@ public class Interface extends Application {
 	private ImageView image;
 	private Text question;
 	private Game jeu;
+	private Story histoire;
 	private GridPane choix;
 	private Text tgauche;
 	private Text tdroite;
@@ -43,8 +44,7 @@ public class Interface extends Application {
 	@Override
 	public void start(Stage primaryStage) {
        	this.primaryStage=primaryStage;
-		ecranfin();
-		/* libre=true;
+		 libre=true;
 		StackPane root=new StackPane();
 		root.setAlignment(Pos.CENTER);
 		VBox col=new VBox();
@@ -118,13 +118,14 @@ public class Interface extends Application {
 		root.getChildren().add(col);
 		Scene scene = new Scene(root,750,800);
 		primaryStage.setScene(scene);
-	*/	primaryStage.show();
+		primaryStage.show();
 	}
 
 
 
 	public void jouer(){
-		jeu=new Game(player);
+		histoire = Database.getStory(1);
+		jeu=new Game(player, histoire);
 		player.setHealthStrt(jeu.getHealth());
 		player.setMoneyStrt(jeu.getMoney());
 		player = Database.insertPlayer(player);
@@ -238,7 +239,7 @@ public class Interface extends Application {
         col.setAlignment(Pos.CENTER);
         Text mes=new Text("Merci d'avoir joué");
 		mes.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
-		Text score=new Text("Votre score est de : -argent "+/*player.getMoneyEnd()+*/"   -bonheur "/*+player.getHealthEnd()*/);
+		Text score=new Text("Votre score est de : -argent "+player.getMoneyEnd()+"   -bonheur "+player.getHealthEnd());
 		score.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		HBox buttons=new HBox();
 		buttons.setSpacing(50);
