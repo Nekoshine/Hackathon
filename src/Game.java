@@ -6,6 +6,8 @@ public class Game {
 
 	private int money;
     private int health;
+    private int compteurEventArgent = 0;
+    private int compteurEventVie = 0;
 
     public int getTurn() {
         return turn;
@@ -67,12 +69,14 @@ public class Game {
                 player.setMoneyEnd(money);
                 Database.insertPlayer(player);
             } else {
-                if (money<10) {
-                    /*currentSituation = Database.getSituation(Database.getRandom(12),12);
-                    turn--;*/
-                } else if (health<10) {
-                    /*currentSituation = Database.getSituation(Database.getRandom(13),13);
-                    turn--;*/
+                if ((money<10)&&(compteurEventArgent==0)) {
+                    currentSituation = Database.getSituation(Database.getRandom(12),12);
+                    turn--;
+                    compteurEventArgent = 1;
+                } else if ((health<10)&&(compteurEventVie==0)) {
+                    currentSituation = Database.getSituation(Database.getRandom(13),13);
+                    turn--;
+                    compteurEventVie = 1;
                 } else {
 
 
