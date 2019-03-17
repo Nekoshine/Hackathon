@@ -17,7 +17,7 @@ public class Database {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e) {
 			System.err.println("Unable to load MySQL Driver " + e.getMessage());
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 		if (connexion == null) {
 			try {
@@ -48,7 +48,6 @@ public class Database {
 			resultat.close();
 		} catch (SQLException e) {
 			System.err.println("Erreur connexion : " + e.getMessage());
-//			e.printStackTrace();
 		}
 		return id;
 	}
@@ -70,7 +69,6 @@ public class Database {
 			return situation;
 		} catch (SQLException e) {
 			System.err.println("Erreur connexion : " + e.getMessage());
-//			e.printStackTrace();
 		}
 		return null;
 	}
@@ -91,11 +89,10 @@ public class Database {
 				resultat.next();
 				player.setId(resultat.getInt("max(IDJoueur)"));
 				requete2.close();
-				
+				resultat.close();
 				return player;
 			} catch (SQLException e) {
 				System.err.println("Erreur connexion : " + e.getMessage());
-//				e.printStackTrace();
 			}
 			return player;
 		}
@@ -118,7 +115,6 @@ public class Database {
 			return true;
 		} catch (SQLException e) {
 			System.err.println("Erreur connexion : " + e.getMessage());
-//			e.printStackTrace();
 		}
 		return false;
 	}
@@ -126,8 +122,7 @@ public class Database {
 	public static boolean insertQuestion(Question question) {
 			try {
 				PreparedStatement requete = Database.getConnexion()
-						.prepareStatement("INSERT INTO `Question`(`Texte`, `ArgentG`, `VieG`, `Image`, `TexteG`, `TexteD`, `Categorie`, `ArgentD`, `VieD`, `NextD`, `NextG`) "
-								+ "VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+						.prepareStatement("INSERT INTO `Question`(`Texte`, `ArgentG`, `VieG`, `Image`, `TexteG`, `TexteD`, `Categorie`, `ArgentD`, `VieD`, `NextD`, `NextG`) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 				requete.setString(1, question.getQuestion());	
 				requete.setInt(2, question.getLeftChoice().getMoneyCost());
 				requete.setInt(3, question.getLeftChoice().getHealthCost());
@@ -144,8 +139,39 @@ public class Database {
 				return true;
 			} catch (SQLException e) {
 				System.err.println("Erreur connexion : " + e.getMessage());
-//				e.printStackTrace();
 			}
 			return false;
 		}
+	public static boolean insertStory(Story story){
+		try {
+			PreparedStatement requete= Database.getConnexion()
+					.prepareStatement("INSERT INTO `Histoire`(`Name`, `List`) VALUES (?,?)");
+			requete.setString(1,story.getName());
+			requete.setString(2, story.getListeSituation());
+			requete.executeUpdate();
+			requete.close();
+			return true;
+		}catch (SQLException e) {
+			System.err.println("Erreur connextion : " + e.getMessage());
+		}
+		return false;
+	}
+	
+	public static Story getStory(int id) {
+		try {
+			PreparedStatement requete= Database.getConnexion()
+					.prepareStatement("Select * from Histoire where Id=?");
+			requete.setInt(1,id);
+			ResultSet resultat = requete.executeQuery();
+			resultat.next();
+			Story story = new Story(resultat.getString("Name"),resultat.getString("List"));
+			requete.close();
+			resultat.close();
+			return story;
+		}catch (SQLException e) {
+			System.err.println("Erreur connextion : " + e.getMessage());
+		}
+		return null;
+	}	
+		
 }

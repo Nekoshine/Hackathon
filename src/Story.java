@@ -1,9 +1,11 @@
 public class Story {
     private int id;
     private String name;
-    private int[] listeSituation = new int[10]; //liste de numéros de question
-
-    public Story(){
+    private String listeSituation ;
+    
+    public Story(String name,String listeSituation){
+    	this.name=name;
+    	this.listeSituation=listeSituation;
     }
 
     public int getId() {
@@ -22,11 +24,25 @@ public class Story {
         this.name = name;
     }
 
-    public int getNumSituation(int i) {
-        return listeSituation[i-1];
+    public String getListeSituation() {
+        return listeSituation;
     }
 
-    public void setListeSituation(int[] listeSituation) {
-        this.listeSituation = listeSituation;
+    public void setListeSituationString(int[] listeSituationInt) {
+    	String liste = new String();
+    	for(int i=0;i<listeSituationInt.length;i++) {
+    		liste = listeSituationInt[i]+" ";
+    	}
+    	System.out.println(liste);
+    	listeSituation=liste;
     }
+    public int[] getListeSituationInt(String listeSituationInt) {
+    	String[] cuted = listeSituationInt.split(" ");
+    	int[] listeSituation = new int[cuted.length];
+    	for(int i=0;i<listeSituation.length;i++) {
+    		listeSituation[i] = Integer.parseInt(cuted[i]);
+    	}
+    	return listeSituation;
+    }
+    // int[] coucou = story.getListeSituationInt(story.getListeSituation));
 }
