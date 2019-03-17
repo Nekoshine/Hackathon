@@ -37,44 +37,69 @@ public class Interface extends Application {
 	private Text tgauche;
 	private Text tdroite;
 	private Player player;
-
+	private boolean libre;
 	@Override
 	public void start(Stage primaryStage) {
+
+		libre=true;
 		StackPane root=new StackPane();
-		root.setAlignment(Pos.CENTER); 	
+		root.setAlignment(Pos.CENTER);
 		VBox col=new VBox();
 		HBox gnom=new HBox();
 		HBox gage=new HBox();
 		HBox gradio=new HBox();
 		gnom.setSpacing(50);
+		gnom.setAlignment(Pos.CENTER);
 		gage.setSpacing(50);
+		gage.setAlignment(Pos.CENTER);
 		gradio.setSpacing(50);
+		gradio.setAlignment(Pos.CENTER);
 		Text tage=new Text("Veuillez entrer votre age");
+		tage.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		Text tnom=new Text("Nom d'utilisateur");
+		tnom.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		TextField age=new TextField();
+		age.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		TextField nom=new TextField();
+		nom.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		gnom.getChildren().addAll(tnom,nom);
 		gage.getChildren().addAll(tage,age);
 		ToggleGroup toggleGroup = new ToggleGroup();
 		RadioButton rb1 = new RadioButton("Homme");
 		rb1.setToggleGroup(toggleGroup);
+		rb1.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		rb1.setSelected(true);
 		RadioButton rb2 = new RadioButton("Femme");
+		rb2.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		rb2.setToggleGroup(toggleGroup);
 		RadioButton rb3 = new RadioButton("Ne se prononce pas ");
 		rb3.setToggleGroup(toggleGroup );
+		rb3.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		gradio.getChildren().addAll(rb1,rb2,rb3);
 		Button start=new Button("Start");
-		start.setOnAction((ActionEvent event) -> {
+		start.setPrefSize(100,50);
+		start.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+		start.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
+						"   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
+						"   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
+				);
+
+		start.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
 				Scanner scan =new Scanner(age.getText());
-				ToggleButton a=(ToggleButton) toggleGroup.getSelectedToggle();
-				player=new Player(nom.getText(),scan.nextInt(),a.getText());
-				System.out.println(player.getPseudo()+"  "+player.getAge()+"  "+player.getSexe());
-				scan.close();
-				jouer(primaryStage);
+				if(scan.hasNextInt() && !nom.getText().isEmpty()) {
+                    ToggleButton a = (ToggleButton) toggleGroup.getSelectedToggle();
+                    player = new Player(nom.getText(), scan.nextInt(), a.getText());
+                    System.out.println(player.getPseudo() + "  " + player.getAge() + "  " + player.getSexe());
+                    scan.close();
+                    jouer(primaryStage);
+                }
 			}
-		);
-		
+		});
+		col.setSpacing(50);
+		col.setAlignment(Pos.CENTER);
 		col.getChildren().addAll(gnom,gradio,gage,start);
 		try {
 			Image imgf = new Image(new FileInputStream("./ressources/images/fond.png"));
@@ -86,6 +111,7 @@ public class Interface extends Application {
 		catch (FileNotFoundException e){
 			e.printStackTrace();
 		}
+		root.setAlignment(Pos.CENTER);
 		root.getChildren().add(col);
 		Scene scene = new Scene(root,750,800);
 		primaryStage.setScene(scene);
@@ -135,35 +161,32 @@ public class Interface extends Application {
 				@Override
 				public void handle(KeyEvent event) {
 					if(event.getCode()==KeyCode.RIGHT){
-						jeu.chooseRight();
-						animationDroite();
+
+						animationdroite();
 						
 					}
 					if(event.getCode()==KeyCode.LEFT){
-						jeu.chooseLeft();
-						animationGauche();
+						animationgauche();
 						
 					}
+					event.consume();
 				}
 			};
 			droite.addEventHandler(MouseEvent.MOUSE_CLICKED,new EventHandler<MouseEvent>(){
 				@Override
 				public void handle(MouseEvent event) {
-					jeu.chooseRight();
-					animationDroite();Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
-					
+					animationdroite();
+
 				}
 			});
 			gauche.addEventHandler(MouseEvent.MOUSE_CLICKED,new EventHandler<MouseEvent>(){
 				@Override
 				public void handle(MouseEvent event) {
-					jeu.chooseLeft();
-					animationGauche();Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
-					
+					animationgauche();
 				}
 			});
 
-			scene.addEventHandler(KeyEvent.KEY_PRESSED,swipe);
+			scene.addEventHandler(KeyEvent.KEY_RELEASED,swipe);
 
 			root.getChildren().add(fond);
 			question.setTextAlignment(TextAlignment.CENTER);
@@ -206,47 +229,68 @@ public class Interface extends Application {
 		choix.add(image,1,0);
 	}
 
+	private void ecranfin(Stage primaryStage){
+		StackPane root=new StackPane();
 
-	private void animationGauche(){
-		Rotate rotation = new Rotate(0, imagesituation.getWidth()/2, imagesituation.getHeight()*2.5);
-		image.getTransforms().add(rotation);
+		Scene scene = new Scene(root,750,800);
+		primaryStage.setScene(scene);
+	}
 
-		Timeline timeline = new Timeline();
-		timeline.getKeyFrames().addAll(
-				new KeyFrame(new Duration(700), new KeyValue(rotation.angleProperty(), -90))
-				);
-		timeline.setCycleCount(1);
-		timeline.setOnFinished(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				choix.getChildren().remove(4);
-				actualiserSituation();
-				choix.add(image,1,0);
 
-			}
-		});
-		timeline.play();
+	private void animationgauche(){
+		if(libre) {
+			libre=false;
+			jeu.chooseLeft();
+			Rotate rotation = new Rotate(0, 200, 1000);
+			image.getTransforms().add(rotation);
+
+			Timeline timeline = new Timeline();
+			timeline.getKeyFrames().addAll(
+					new KeyFrame(new Duration(700), new KeyValue(rotation.angleProperty(), -90))
+			);
+			timeline.setCycleCount(1);
+			timeline.setOnFinished(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					choix.getChildren().remove(4);
+					actualiserSituation();
+					choix.add(image, 1, 0);
+					Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
+					libre=true;
+
+				}
+			});
+			timeline.play();
+		}
 
 	}
 
-	private void animationDroite(){
-		Rotate rotation = new Rotate(0, imagesituation.getWidth()/2, imagesituation.getHeight()*2.5);
-		image.getTransforms().add(rotation);
-		Timeline timeline = new Timeline();
-		timeline.getKeyFrames().addAll(
-				new KeyFrame(new Duration(700), new KeyValue(rotation.angleProperty(), +90))
-				);
-		timeline.setCycleCount(1);
-		timeline.setOnFinished(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				choix.getChildren().remove(4);
-				actualiserSituation();
-				choix.add(image,1,0);
+	private void animationdroite(){
+		if(libre) {
 
-			}
-		});
-		timeline.play();
+			libre = false;
+			jeu.chooseRight();
+			Rotate rotation = new Rotate(0, 200, 1000);
+			image.getTransforms().add(rotation);
+			Timeline timeline = new Timeline();
+			timeline.getKeyFrames().addAll(
+					new KeyFrame(new Duration(700), new KeyValue(rotation.angleProperty(), +90))
+			);
+			timeline.setCycleCount(1);
+			timeline.setOnFinished(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					choix.getChildren().remove(4);
+					actualiserSituation();
+					choix.add(image, 1, 0);
+					libre=true;
+					Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
+
+				}
+			});
+
+			timeline.play();
+		}
 
 	}
 
@@ -260,9 +304,9 @@ public class Interface extends Application {
 		System.out.println(jeu.getCurrentSituation().getQuestion());
 		image = new ImageView(imagesituation);
 		image.setFitWidth(300);
-		image.preserveRatioProperty();
+		image.setFitHeight(300);
 		question.setText(jeu.getCurrentSituation().getQuestion());
-		tdroite.setText(jeu.getCurrentSituation().getRightChoice().getText());
-		tgauche.setText(jeu.getCurrentSituation().getLeftChoice().getText());
+		tdroite.setText(jeu.getCurrentSituation().rightChoice.getText());
+		tgauche.setText(jeu.getCurrentSituation().leftChoice.getText());
 	}
 }
