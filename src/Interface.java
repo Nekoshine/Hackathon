@@ -48,7 +48,7 @@ public class Interface extends Application {
 		gnom.setSpacing(50);
 		gage.setSpacing(50);
 		gradio.setSpacing(50);
-		Text tage=new Text("veuillez entrer votre Age");
+		Text tage=new Text("Veuillez entrer votre age");
 		Text tnom=new Text("Nom d'utilisateur");
 		TextField age=new TextField();
 		TextField nom=new TextField();

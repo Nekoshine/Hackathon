@@ -33,7 +33,7 @@ public class Player {
         moneyEnd = money;
     }
 
-    public void setVieFin(int health) {
+    public void setHealthEnd(int health) {
         healthEnd = health;
     }
 
