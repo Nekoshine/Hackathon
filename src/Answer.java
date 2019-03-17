@@ -33,22 +33,4 @@ public class Answer{
 	public int getStatus() {
 		return status;
 	}
-	public void setAnswerNumber(int answerNumber) {
-		this.answerNumber = answerNumber;
-	}
-	public void setPlayerNumber(int playerNumber) {
-		this.playerNumber = playerNumber;
-	}
-	public void setQuestionNumber(int questionNumber) {
-		this.questionNumber = questionNumber;
-	}
-	public void setHealth(int health) {
-		this.health = health;
-	}
-	public void setMoney(int money) {
-		this.money = money;
-	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
 }
