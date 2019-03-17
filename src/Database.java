@@ -72,26 +72,25 @@ public class Database {
 		}
 		return null;
 	}
-
 	public static boolean insertPlayer(Player player) {
-		try {
-			PreparedStatement requete = Database.getConnexion()
-					.prepareStatement("INSERT INTO `Joueur`(`IDJoueur`, `Pseudo`, `Age`, `Sexe`, `ArgentDep`, `VieDep`) VALUES (?,?,?,?,?,?)");
-			requete.setString(1, player.getPseudo());
-			requete.setInt(2, player.getAge());
-			requete.setString(3, player.getSexe());
-			requete.setInt(4, player.getArgentDep());
-			requete.setInt(5, player.getVieDep());
-			ResultSet resultat = requete.executeQuery();
-			requete.close();
-			resultat.close();
-			return true;
-		} catch (SQLException e) {
-			System.err.println("Erreur connexion : " + e.getMessage());
+			try {
+				PreparedStatement requete = Database.getConnexion()
+						.prepareStatement("INSERT INTO `Joueur`(`IDJoueur`, `Pseudo`, `Age`, `Sexe`, `ArgentDep`, `VieDep`) VALUES (?,?,?,?,?,?)");
+				requete.setString(1, player.getPseudo());
+				requete.setInt(2, player.getAge());
+				requete.setString(3, player.getSexe());
+				requete.setInt(4, player.getArgentDep());
+				requete.setInt(5, player.getVieDep());
+				ResultSet resultat = requete.executeQuery();
+				requete.close();
+				resultat.close();
+				return true;
+			} catch (SQLException e) {
+				System.err.println("Erreur connexion : " + e.getMessage());
+			}
+			return false;
 		}
-		return false;
-	}
-	
+		
 	public static boolean insertAnswer(Answer answer) {
 		try {
 			PreparedStatement requete = Database.getConnexion()
