@@ -49,6 +49,7 @@ public class Interface extends Application {
 	private Boolean lean;
 	private boolean libre;
 	private Stage primaryStage;
+	private int numcategorie;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -136,8 +137,18 @@ public class Interface extends Application {
 
 		Label labelTitle = new Label("Remplisser votre histoire (10 questions) :");
 
+		numcategorie = 1;
+		ArrayList<QuestionTmp> list = Database.getQuestionsName();
+		for (int i = 1; i < 11; i++) {
+			list.add(0,new QuestionTmp("Random",0,i));
+		}
 
-		ObservableList<QuestionTmp> storiesL = FXCollections.observableArrayList(Database.getQuestionsName());
+		ObservableList<QuestionTmp> storiesL = FXCollections.observableArrayList();
+		for (QuestionTmp questionTmp : list) {
+			if(questionTmp.categorie==numcategorie) {
+				storiesL.add(questionTmp);
+			}
+		}
 		ListView<QuestionTmp> lviewLeft = new ListView<>(storiesL);
 		lviewLeft.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		lviewLeft.getSelectionModel().selectFirst();
@@ -167,27 +178,67 @@ public class Interface extends Application {
 		Label label = new Label("Nom de l'histoire : ");
 
 
+
 		toRight.setOnAction(event -> {
 			if(lviewRight.getItems().size()<10) {
 				int index = lviewLeft.getSelectionModel().getSelectedIndex();
 				lviewRight.getItems().add(lviewLeft.getItems().remove(index));
 				lviewLeft.getSelectionModel().select(index);
+				lviewLeft.getItems().clear();
+				numcategorie++;
+				for (QuestionTmp questionTmp : list) {
+					if(questionTmp.categorie==numcategorie) {
+						lviewLeft.getItems().add(questionTmp);
+					}
+				}
+				lviewLeft.getSelectionModel().selectFirst();
 			}
 		});
 
 		toLeft.setOnAction(event -> {
 			if(lviewRight.getItems().size()>0) {
-				lviewLeft.getItems().add(lviewRight.getItems().remove(lviewRight.getSelectionModel().getSelectedIndex()));
+				lviewRight.getItems().remove(lviewRight.getItems().size()-1);
+				numcategorie--;
+				lviewLeft.getItems().clear();
+				for (QuestionTmp questionTmp : list) {
+					if(questionTmp.categorie==numcategorie) {
+						lviewLeft.getItems().add(questionTmp);
+					}
+				}
+				lviewLeft.getSelectionModel().selectFirst();
 			}
 		});
 
 		allLeft.setOnAction(event -> {
-			while(lviewRight.getItems().size()>0) {
-				lviewLeft.getItems().add(lviewRight.getItems().remove(0));
+			numcategorie = 1;
+			for (QuestionTmp questionTmp : list) {
+				if(questionTmp.categorie==numcategorie) {
+					lviewLeft.getItems().add(questionTmp);
+				}
+			}
+			lviewRight.getItems().clear();
+			lviewLeft.getSelectionModel().selectFirst();
+		});
+
+		lviewLeft.setOnMouseClicked(event -> {
+			if (event.getClickCount()==2){
+				if(lviewRight.getItems().size()<10) {
+					int index = lviewLeft.getSelectionModel().getSelectedIndex();
+					lviewRight.getItems().add(lviewLeft.getItems().remove(index));
+					lviewLeft.getSelectionModel().select(index);
+					lviewLeft.getItems().clear();
+					numcategorie++;
+					for (QuestionTmp questionTmp : list) {
+						if(questionTmp.categorie==numcategorie) {
+							lviewLeft.getItems().add(questionTmp);
+						}
+					}
+					lviewLeft.getSelectionModel().selectFirst();
+				}
 			}
 		});
 
-		moveUp.setOnAction(event -> {
+/*		moveUp.setOnAction(event -> {
 			QuestionTmp tmp = lviewRight.getSelectionModel().getSelectedItem();
 			int index = lviewRight.getSelectionModel().getSelectedIndex();
 			if (index>0){
@@ -205,7 +256,7 @@ public class Interface extends Application {
 				lviewRight.getItems().add(index+1,tmp);
 				lviewRight.getSelectionModel().select(index+1);
 			}
-		});
+		});*/
 
 
 		commit.setOnAction(event -> {
@@ -237,15 +288,8 @@ public class Interface extends Application {
 		grid2.setPadding(new Insets(20));
 		grid2.setAlignment(Pos.CENTER);
 
-		GridPane grid3 = new GridPane();
-		grid3.add(moveUp,0,0);
-		grid3.add(moveDown,0,2);
-		grid3.setHgap(15);
-		grid3.setVgap(15);
-		grid3.setPadding(new Insets(20));
-		grid3.setAlignment(Pos.CENTER);
+
 		grid.add(grid2,2,1,1,5);
-		grid.add(grid3,5,1,1,5);
 		grid.add(label,1,6);
 		grid.add(nameBox,2,6);
 		grid.add(commit, 4, 6);
