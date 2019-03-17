@@ -5,7 +5,8 @@ public class Question {
     protected Choice leftChoice;
     protected String image;
     
-    public Question(int id, String question, Choice rightChoice, Choice leftChoice,String image) {
+
+	public Question(int id, String question, Choice rightChoice, Choice leftChoice,String image) {
         this.id = id;
         this.question = question;
         this.rightChoice = rightChoice;
@@ -23,15 +24,18 @@ public class Question {
                 '}';
     }
 
+    public String getImage() {
+		return image;
+	}
     public int chooseLeft(Game game){
-        game.health += leftChoice.getHealthCost();
-        game.money += leftChoice.getMoneyCost();
+        game.setHealth(game.getHealth() + leftChoice.getHealthCost());
+        game.setMoney(game.getMoney() + leftChoice.getMoneyCost()) ;
         return leftChoice.getEnding();
     }
 
     public int chooseRight(Game game){
-        game.health += rightChoice.getHealthCost();
-        game.money += rightChoice.getMoneyCost();
+    	game.setHealth(game.getHealth() + rightChoice.getHealthCost());
+        game.setMoney(game.getMoney() + rightChoice.getMoneyCost()) ;
         return rightChoice.getEnding();
     }
 

@@ -72,8 +72,50 @@ public class Database {
 		}
 		return null;
 	}
-
-	public static void main(String[] args) {
-		Database.getConnexion();
+	public static Player insertPlayer(Player player) {
+			try {
+				PreparedStatement requete = Database.getConnexion()
+						.prepareStatement("INSERT INTO `Joueur`( `Pseudo`, `Age`, `Sexe`, `ArgentDep`, `VieDep`) VALUES (?,?,?,?,?)");
+				requete.setString(1, player.getPseudo());	
+				requete.setInt(2, player.getAge());
+				requete.setString(3, player.getSexe());
+				requete.setInt(4, player.getMoneyStrt());
+				requete.setInt(5, player.getHealthStrt());
+				requete.executeUpdate();
+				requete.close();
+				PreparedStatement requete2 = Database.getConnexion()
+						.prepareStatement("Select max(IDJoueur) from Joueur ");
+				ResultSet resultat = requete2.executeQuery();
+				resultat.next();
+				player.setId(resultat.getInt("max(IDJoueur)"));
+				requete2.close();
+				
+				return player;
+			} catch (SQLException e) {
+				System.err.println("Erreur connexion : " + e.getMessage());
+			}
+			return player;
+		}
+		
+	public static boolean insertAnswer(Answer answer) {
+		System.out.println(answer.getMoney());
+		System.out.println(answer.getHealth());
+		System.out.println(answer.getQuestionNumber());
+		System.out.println(answer.getPlayerNumber());
+		
+		try {
+			PreparedStatement requete = Database.getConnexion()
+					.prepareStatement("INSERT INTO `Reponse`( `NuméroJoueur`, `NuméroQuestion`, `VieActuelle`, `ArgentActuel`) VALUES (?,?,?,?)");
+			requete.setInt(1, answer.getPlayerNumber());
+			requete.setInt(2, answer.getQuestionNumber());
+			requete.setInt(3, answer.getHealth());
+			requete.setInt(4, answer.getMoney());
+			requete.executeUpdate();
+			requete.close();	
+			return true;
+		} catch (SQLException e) {
+			System.err.println("Erreur connexion : " + e.getMessage());
+		}
+		return false;
 	}
 }
