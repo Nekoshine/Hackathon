@@ -105,7 +105,7 @@ public class Database {
 		
 		try {
 			PreparedStatement requete = Database.getConnexion()
-					.prepareStatement("INSERT INTO `Reponse`( `NuméroJoueur`, `NuméroQuestion`, `VieActuelle`, `ArgentActuel`) VALUES (?,?,?,?)");
+					.prepareStatement("INSERT INTO `Reponse`( `NumÃ©roJoueur`, `NumÃ©roQuestion`, `VieActuelle`, `ArgentActuel`) VALUES (?,?,?,?)");
 			requete.setInt(1, answer.getPlayerNumber());
 			requete.setInt(2, answer.getQuestionNumber());
 			requete.setInt(3, answer.getHealth());
