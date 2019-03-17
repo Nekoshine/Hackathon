@@ -72,38 +72,46 @@ public class Database {
 		}
 		return null;
 	}
-	public static boolean insertPlayer(Player player) {
+	public static Player insertPlayer(Player player) {
 			try {
 				PreparedStatement requete = Database.getConnexion()
-						.prepareStatement("INSERT INTO `Joueur`(`IDJoueur`, `Pseudo`, `Age`, `Sexe`, `ArgentDep`, `VieDep`) VALUES (?,?,?,?,?,?)");
-				requete.setString(1, player.getPseudo());
+						.prepareStatement("INSERT INTO `Joueur`( `Pseudo`, `Age`, `Sexe`, `ArgentDep`, `VieDep`) VALUES (?,?,?,?,?)");
+				requete.setString(1, player.getPseudo());	
 				requete.setInt(2, player.getAge());
 				requete.setString(3, player.getSexe());
-				requete.setInt(4, player.getArgentDep());
-				requete.setInt(5, player.getVieDep());
-				ResultSet resultat = requete.executeQuery();
+				requete.setInt(4, player.getMoneyStrt());
+				requete.setInt(5, player.getHealthStrt());
+				requete.executeUpdate();
 				requete.close();
-				resultat.close();
-				return true;
+				PreparedStatement requete2 = Database.getConnexion()
+						.prepareStatement("Select max(IDJoueur) from Joueur ");
+				ResultSet resultat = requete2.executeQuery();
+				resultat.next();
+				player.setId(resultat.getInt("max(IDJoueur)"));
+				requete2.close();
+				
+				return player;
 			} catch (SQLException e) {
 				System.err.println("Erreur connexion : " + e.getMessage());
 			}
-			return false;
+			return player;
 		}
 		
 	public static boolean insertAnswer(Answer answer) {
+		System.out.println(answer.getMoney());
+		System.out.println(answer.getHealth());
+		System.out.println(answer.getQuestionNumber());
+		System.out.println(answer.getPlayerNumber());
+		
 		try {
 			PreparedStatement requete = Database.getConnexion()
-					.prepareStatement("INSERT INTO Reponse VALUES (?,?,?,?,?,?)");
-			requete.setInt(1, answer.getAnswerNumber());
-			requete.setInt(2, answer.getPlayerNumber());
-			requete.setInt(3, answer.getQuestionNumber());
-			requete.setInt(4, answer.getHealth());
-			requete.setInt(5, answer.getMoney());
-			requete.setInt(6, answer.getStatus());
-			ResultSet resultat = requete.executeQuery();
-			requete.close();
-			resultat.close();
+					.prepareStatement("INSERT INTO `Reponse`( `NuméroJoueur`, `NuméroQuestion`, `VieActuelle`, `ArgentActuel`) VALUES (?,?,?,?)");
+			requete.setInt(1, answer.getPlayerNumber());
+			requete.setInt(2, answer.getQuestionNumber());
+			requete.setInt(3, answer.getHealth());
+			requete.setInt(4, answer.getMoney());
+			requete.executeUpdate();
+			requete.close();	
 			return true;
 		} catch (SQLException e) {
 			System.err.println("Erreur connexion : " + e.getMessage());

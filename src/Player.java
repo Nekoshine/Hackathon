@@ -1,34 +1,40 @@
 public class Player {
     private String Pseudo;
     private int Age;
-    private String Sexe;
-    private int ArgentDep;
-    private int ArgentFin;
-    private int VieDep;
-    private int VieFin;
+    private String Sex;
+    private int moneyStrt;
+    private int moneyEnd;
+    private int healthStrt;
+    private int healthEnd;
+    private int id;
 
 
-
-    public Player(String pseudo, int age, String sexe) {
+    public Player(String pseudo, int age, String sex) {
         Pseudo = pseudo;
         Age = age;
-        Sexe = sexe;
+        Sex = sex;
     }
 
-    public void setArgentDep(int argentDep) {
-        ArgentDep = argentDep;
+    public void setId(int nid) {
+    	id=nid;
+    }
+    public int getId() {
+    	return id;
+    }
+    public void setMoneyStrt(int money) {
+        moneyStrt = money;
     }
 
-    public void setVieDep(int vieDep) {
-        VieDep = vieDep;
+    public void setHealthStrt(int health) {
+        healthStrt = health;
     }
 
-    public void setArgentFin(int argentFin) {
-        ArgentFin = argentFin;
+    public void setMoneyEnd(int money) {
+        moneyEnd = money;
     }
 
-    public void setVieFin(int vieFin) {
-        VieFin = vieFin;
+    public void setVieFin(int health) {
+        healthEnd = health;
     }
 
     public String getPseudo() {
@@ -40,22 +46,22 @@ public class Player {
     }
 
     public String getSexe() {
-        return Sexe;
+        return Sex;
     }
 
-    public int getArgentDep() {
-        return ArgentDep;
+    public int getMoneyStrt() {
+        return moneyStrt;
     }
 
-    public int getArgentFin() {
-        return ArgentFin;
+    public int getMoneyEnd() {
+        return moneyEnd;
     }
 
-    public int getVieDep() {
-        return VieDep;
+    public int getHealthStrt() {
+        return healthStrt;
     }
 
-    public int getVieFin() {
-        return VieFin;
+    public int getHealthEnd() {
+        return healthEnd;
     }
 }
