@@ -201,7 +201,7 @@ public class Database {
 			ArrayList<QuestionTmp> stories = new ArrayList<>();
 			while (resultat.next()) {
 				if (resultat.getInt("Categorie")<=10) {
-					stories.add(new QuestionTmp(resultat.getString("Texte"),resultat.getInt("IDQuestion")));
+					stories.add(new QuestionTmp(resultat.getString("Texte"),resultat.getInt("IDQuestion"),resultat.getInt("Categorie")));
 				}
 			}
 			requete.close();
