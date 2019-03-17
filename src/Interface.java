@@ -137,13 +137,13 @@ public class Interface extends Application {
 		Label labelTitle = new Label("Remplisser votre histoire (10 questions) :");
 
 
-		ObservableList<String> storiesL = FXCollections.observableArrayList(Database.getQuestionsName());
-		ListView<String> lviewLeft = new ListView<>(storiesL);
+		ObservableList<QuestionTmp> storiesL = FXCollections.observableArrayList(Database.getQuestionsName());
+		ListView<QuestionTmp> lviewLeft = new ListView<>(storiesL);
 		lviewLeft.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		lviewLeft.getSelectionModel().selectFirst();
 
-		ObservableList<String> storiesR = FXCollections.observableArrayList();
-		ListView<String> lviewRight = new ListView<>(storiesR);
+		ObservableList<QuestionTmp> storiesR = FXCollections.observableArrayList();
+		ListView<QuestionTmp> lviewRight = new ListView<>(storiesR);
 		lviewRight.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		lviewRight.getSelectionModel().selectFirst();
 
@@ -188,7 +188,7 @@ public class Interface extends Application {
 		});
 
 		moveUp.setOnAction(event -> {
-			String tmp = lviewRight.getSelectionModel().getSelectedItem();
+			QuestionTmp tmp = lviewRight.getSelectionModel().getSelectedItem();
 			int index = lviewRight.getSelectionModel().getSelectedIndex();
 			if (index>0){
 				lviewRight.getItems().remove(index);
@@ -198,7 +198,7 @@ public class Interface extends Application {
 		});
 
 		moveDown.setOnAction(event -> {
-			String tmp = lviewRight.getSelectionModel().getSelectedItem();
+			QuestionTmp tmp = lviewRight.getSelectionModel().getSelectedItem();
 			int index = lviewRight.getSelectionModel().getSelectedIndex();
 			if (index<lviewRight.getItems().size()-1){
 				lviewRight.getItems().remove(index);
@@ -209,7 +209,13 @@ public class Interface extends Application {
 
 
 		commit.setOnAction(event -> {
-
+			if(lviewRight.getItems().size()==10 && nameBox.getCharacters().length()>0) {
+				String story = "";
+				for (QuestionTmp questionTmp : lviewRight.getItems()) {
+					story = story.concat(questionTmp.id+",");
+				}
+				Database.insertStory(new Story(nameBox.getCharacters().toString(),story.substring(0,story.length()-1)));
+			}
 		});
 
 

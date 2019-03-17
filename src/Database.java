@@ -193,14 +193,16 @@ public class Database {
 		return null;
 	}
 
-	public static ArrayList<String> getQuestionsName() {
+	public static ArrayList<QuestionTmp> getQuestionsName() {
 		try {
 			PreparedStatement requete= Database.getConnexion()
-					.prepareStatement("Select Texte from Question");
+					.prepareStatement("Select * from Question");
 			ResultSet resultat = requete.executeQuery();
-			ArrayList<String> stories = new ArrayList<>();
+			ArrayList<QuestionTmp> stories = new ArrayList<>();
 			while (resultat.next()) {
-				stories.add(resultat.getString("Texte"));
+				if (resultat.getInt("Categorie")<=10) {
+					stories.add(new QuestionTmp(resultat.getString("Texte"),resultat.getInt("IDQuestion")));
+				}
 			}
 			requete.close();
 			resultat.close();
