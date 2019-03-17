@@ -86,11 +86,6 @@ public class Interface extends Application {
 		gradio.getChildren().addAll(rb1,rb2,rb3);
 		Button start=new Button("Start");
 		start.setPrefSize(100,50);
-		start.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-		start.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
-						"   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
-						"   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
-				);
 
 		start.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -211,11 +206,11 @@ public class Interface extends Application {
 					if(event.getCode()==KeyCode.RIGHT){
 
 						animationdroite();
-						
+
 					}
 					if(event.getCode()==KeyCode.LEFT){
 						animationgauche();
-						
+
 					}
 					event.consume();
 				}
@@ -283,17 +278,12 @@ public class Interface extends Application {
         col.setAlignment(Pos.CENTER);
         Text mes=new Text("Merci d'avoir joué");
 		mes.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
-		Text score=new Text("Votre score est de : -argent "+player.getMoneyEnd()+"   -bonheur "+player.getHealthEnd());
+		Text score=new Text("Votre score est de : argent= "+player.getMoneyEnd()+"   bonheur= "+player.getHealthEnd());
 		score.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		HBox buttons=new HBox();
 		buttons.setSpacing(50);
 		buttons.setAlignment(Pos.CENTER);
 		Button exit=new Button("exit");
-		exit.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
-		exit.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
-				"   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
-				"   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
-		);
 		exit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -301,11 +291,7 @@ public class Interface extends Application {
 			}
 		});
 		Button hist=new Button("Creer son histoire ");
-		hist.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
-				"   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
-				"   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
-		);
-		hist.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+
 		hist.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -313,17 +299,22 @@ public class Interface extends Application {
 			}
 		});
 		Button rejouer=new Button("rejouer");
-		rejouer.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
-				"   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
-				"   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
-		);
-		rejouer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		rejouer.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				start(primaryStage);
 			}
 		});
+		try {
+			Image imgf = new Image(new FileInputStream("./ressources/images/fond.png"));
+			ImageView fond = new ImageView(imgf);
+			fond.setFitWidth(1600);
+			fond.setFitHeight(1000);
+			root.getChildren().add(fond);
+		}
+		catch (FileNotFoundException e){
+			e.printStackTrace();
+		}
 		hist.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		Scene scene = new Scene(root,750,800);
 		primaryStage.setScene(scene);
