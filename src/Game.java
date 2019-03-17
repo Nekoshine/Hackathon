@@ -58,4 +58,8 @@ public class Game {
             currentSituation = Database.getSituation(nextId, 11);
         }
     }
+
+    public boolean isEnded() {
+	    return turn>10;
+    }
 }
