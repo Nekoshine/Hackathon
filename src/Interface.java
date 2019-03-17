@@ -18,12 +18,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.*;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -89,9 +92,9 @@ public class Interface extends Application {
 		start.setPrefSize(100,50);
 
 		start.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent event) {
+				start.click();
 				Scanner scan =new Scanner(age.getText());
 				if(scan.hasNextInt() && !nom.getText().isEmpty()) {
                     ToggleButton a = (ToggleButton) toggleGroup.getSelectedToggle();
@@ -138,14 +141,10 @@ public class Interface extends Application {
         lview.getSelectionModel().selectFirst();
         Button start = new Button("Start");
         start.setPrefSize(100, 50);
-        start.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-        start.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
-                "   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
-                "   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
-        );
         start.setAlignment(Pos.CENTER);
 
         start.setOnAction(event -> {
+        	start.click();
             histoire = Database.getStory(lview.getSelectionModel().getSelectedIndex()+1);
             jouer();
         });
@@ -157,6 +156,16 @@ public class Interface extends Application {
         grid.add(lview, 0, 1);
         grid.add(start, 0, 3);
 
+		try {
+			Image imgf = new Image(new FileInputStream("./ressources/images/fond.png"));
+			ImageView fond = new ImageView(imgf);
+			fond.setFitWidth(1600);
+			fond.setFitHeight(1000);
+			root.getChildren().add(fond);
+		}
+		catch (FileNotFoundException e){
+			e.printStackTrace();
+		}
         root.getChildren().add(grid);
         Scene scene = new Scene(root, 750, 800);
         primaryStage.setScene(scene);
@@ -267,7 +276,6 @@ public class Interface extends Application {
 						animationgauche();
 
 					}
-					event.consume();
 				}
 			};
 			droite.addEventHandler(MouseEvent.MOUSE_CLICKED,new EventHandler<MouseEvent>(){
@@ -336,27 +344,22 @@ public class Interface extends Application {
 		Text score=new Text("Votre score est de : argent= "+player.getMoneyEnd()+"   bonheur= "+player.getHealthEnd());
 		score.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		HBox buttons=new HBox();
-		buttons.setSpacing(50);
+		buttons.setSpacing(150);
 		buttons.setAlignment(Pos.CENTER);
 		Button exit=new Button("exit");
 		exit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				exit.click();
 				exit();
 			}
 		});
-		Button hist=new Button("Creer son histoire ");
 
-		hist.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				creation();
-			}
-		});
 		Button rejouer=new Button("rejouer");
 		rejouer.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				rejouer.click();
 				start(primaryStage);
 			}
 		});
@@ -370,11 +373,10 @@ public class Interface extends Application {
 		catch (FileNotFoundException e){
 			e.printStackTrace();
 		}
-		hist.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		Scene scene = new Scene(root,750,800);
 		primaryStage.setScene(scene);
 		col.setSpacing(50);
-		buttons.getChildren().addAll(hist,rejouer,exit);
+		buttons.getChildren().addAll(rejouer,exit);
 		col.getChildren().addAll(mes,score,buttons);
 		root.getChildren().add(col);
 	}
@@ -384,6 +386,10 @@ public class Interface extends Application {
 	}
 	private void animationgauche(){
 		if(libre) {
+			Media sound = new Media(new File("./ressources/sound/card.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.setVolume(50);
+			mediaPlayer.play();
 			libre=false;
 			jeu.chooseLeft();
 			System.out.println(jeu.isEnded()+"  "+jeu.getTurn());
@@ -420,7 +426,10 @@ public class Interface extends Application {
 
 	private void animationdroite(){
 		if(libre) {
-
+			Media sound = new Media(new File("./ressources/sound/card.wav").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.setVolume(50);
+			mediaPlayer.play();
             libre = false;
             jeu.chooseRight();
 			System.out.println(jeu.isEnded()+"  "+jeu.getTurn());
