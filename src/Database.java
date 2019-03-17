@@ -17,7 +17,7 @@ public class Database {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch(ClassNotFoundException e) {
 			System.err.println("Unable to load MySQL Driver " + e.getMessage());
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		if (connexion == null) {
 			try {
@@ -48,6 +48,7 @@ public class Database {
 			resultat.close();
 		} catch (SQLException e) {
 			System.err.println("Erreur connexion : " + e.getMessage());
+//			e.printStackTrace();
 		}
 		return id;
 	}
@@ -69,6 +70,7 @@ public class Database {
 			return situation;
 		} catch (SQLException e) {
 			System.err.println("Erreur connexion : " + e.getMessage());
+//			e.printStackTrace();
 		}
 		return null;
 	}
@@ -93,6 +95,7 @@ public class Database {
 				return player;
 			} catch (SQLException e) {
 				System.err.println("Erreur connexion : " + e.getMessage());
+//				e.printStackTrace();
 			}
 			return player;
 		}
@@ -115,6 +118,7 @@ public class Database {
 			return true;
 		} catch (SQLException e) {
 			System.err.println("Erreur connexion : " + e.getMessage());
+//			e.printStackTrace();
 		}
 		return false;
 	}
@@ -140,6 +144,7 @@ public class Database {
 				return true;
 			} catch (SQLException e) {
 				System.err.println("Erreur connexion : " + e.getMessage());
+//				e.printStackTrace();
 			}
 			return false;
 		}

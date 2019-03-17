@@ -44,6 +44,7 @@ public class Game {
     }
 
     private void nextSituation(int nextId) {
+        System.out.println("-->"+nextId+"  "+turn);
         if(nextId==0) {
             turn++;
             if (isEnded()) {
@@ -53,14 +54,16 @@ public class Game {
                 Database.insertPlayer(player);
             } else {
                 if (money<10) {
-                    currentSituation = Database.getSituation(Database.getRandom(12),12);
-                    turn--;
+                    /*currentSituation = Database.getSituation(Database.getRandom(12),12);
+                    turn--;*/
                 } else if (health<10) {
-                    currentSituation = Database.getSituation(Database.getRandom(13),13);
-                    turn--;
+                    /*currentSituation = Database.getSituation(Database.getRandom(13),13);
+                    turn--;*/
                 } else {
-                    currentSituation = Database.getSituation(Database.getRandom(turn), turn);
+
+
                 }
+                currentSituation = Database.getSituation(Database.getRandom(turn), turn);
             }
         } else {
             currentSituation = Database.getSituation(nextId, 11);
