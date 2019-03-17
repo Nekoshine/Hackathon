@@ -8,24 +8,24 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+import static java.lang.Double.min;
 
 public class Interface extends Application {
 
@@ -36,9 +36,66 @@ public class Interface extends Application {
     private GridPane choix;
     private Text tgauche;
     private Text tdroite;
+    private Player player;
     @Override
     public void start(Stage primaryStage) {
-        jeu=new Game();
+        StackPane root=new StackPane();
+        root.setAlignment(Pos.CENTER);
+        VBox col=new VBox();
+        HBox gnom=new HBox();
+        HBox gage=new HBox();
+        HBox gradio=new HBox();
+        gnom.setSpacing(50);
+        gage.setSpacing(50);
+        gradio.setSpacing(50);
+        Text tage=new Text("veuillez entrer votre Age");
+        Text tnom=new Text("Nom d'utilisateur");
+        TextField age=new TextField();
+        TextField nom=new TextField();
+        gnom.getChildren().addAll(tnom,nom);
+        gage.getChildren().addAll(tage,age);
+        ToggleGroup toggleGroup = new ToggleGroup();
+        RadioButton rb1 = new RadioButton("Homme");
+        rb1.setToggleGroup(toggleGroup);
+        rb1.setSelected(true);
+        RadioButton rb2 = new RadioButton("Femme");
+        rb2.setToggleGroup(toggleGroup);
+        RadioButton rb3 = new RadioButton("Ne se prononce pas ");
+        rb3.setToggleGroup(toggleGroup );
+        gradio.getChildren().addAll(rb1,rb2,rb3);
+        Button start=new Button("Start");
+        start.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                Scanner scan =new Scanner(age.getText());
+                ToggleButton a=(ToggleButton) toggleGroup.getSelectedToggle();
+                player=new Player(nom.getText(),scan.nextInt(),a.getText());
+                System.out.println(player.getPseudo()+"  "+player.getAge()+"  "+player.getSexe());
+                jouer(primaryStage);
+            }
+        });
+        col.getChildren().addAll(gnom,gradio,gage,start);
+        try {
+            Image imgf = new Image(new FileInputStream("./ressources/images/fond.png"));
+            ImageView fond = new ImageView(imgf);
+            fond.setFitWidth(1600);
+            fond.setFitHeight(1000);
+            root.getChildren().add(fond);
+        }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        root.getChildren().add(col);
+        Scene scene = new Scene(root,750,800);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+
+
+    public void jouer(Stage primaryStage){
+        jeu=new Game(player);
         StackPane root=new StackPane();
         VBox grid=new VBox();
         choix=new GridPane();
@@ -70,11 +127,11 @@ public class Interface extends Application {
             image= new ImageView(imagesituation);
 
 
-            Scene scene = new Scene(root, 750, 800);
+            Scene scene = new Scene(root,750,800);
             EventHandler<KeyEvent> swipe=new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
-                   if(event.getCode()==KeyCode.RIGHT){
+                    if(event.getCode()==KeyCode.RIGHT){
                         jeu.chooseRight();
                         animationdroite();
 
@@ -120,26 +177,30 @@ public class Interface extends Application {
             primaryStage.setTitle("Hackathon");
             scene.widthProperty().addListener(new ChangeListener<Number>() {
                 @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-                    root.setScaleX(newSceneWidth.floatValue()/750);
-                    System.out.println("Width: " + newSceneWidth);
+                    double scale=min(newSceneWidth.doubleValue()/750,scene.getHeight()/800);
+                    root.setScaleX(scale);
+                    root.setScaleY(scale);
                 }
             });
             scene.heightProperty().addListener(new ChangeListener<Number>() {
                 @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                    root.setScaleY(newSceneHeight.floatValue()/800);
-                    System.out.println("Height: " + newSceneHeight);
+                    double scale=min(newSceneHeight.doubleValue()/800,scene.getWidth()/750);
+                    root.setScaleX(scale);
+                    root.setScaleY(scale);
                 }
             });
             primaryStage.setScene(scene);
-            primaryStage.show();
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
         choix.getChildren().remove(4);
         actualiserSituation();
         choix.add(image,1,0);
     }
+
 
     private void animationgauche(){
         Rotate rotation = new Rotate(0, imagesituation.getWidth()/2, imagesituation.getHeight()*2.5);
