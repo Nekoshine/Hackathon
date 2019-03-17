@@ -161,6 +161,11 @@ public class Interface extends Application {
 
 		Button commit = new Button("Commit");
 
+		TextField nameBox = new TextField();
+		nameBox.setPrefWidth(100);
+
+		Label label = new Label("Nom de l'histoire : ");
+
 
 		toRight.setOnAction(event -> {
 			if(lviewRight.getItems().size()<10) {
@@ -235,7 +240,9 @@ public class Interface extends Application {
 		grid3.setAlignment(Pos.CENTER);
 		grid.add(grid2,2,1,1,5);
 		grid.add(grid3,5,1,1,5);
-		grid.add(commit, 1, 6);
+		grid.add(label,1,6);
+		grid.add(nameBox,2,6);
+		grid.add(commit, 4, 6);
 
 		root.getChildren().add(grid);
 		Scene scene = new Scene(root, 1200, 800);
