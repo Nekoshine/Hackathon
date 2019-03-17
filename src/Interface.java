@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import static java.lang.Double.min;
+import static javafx.application.Platform.exit;
 
 public class Interface extends Application {
 
@@ -38,10 +39,12 @@ public class Interface extends Application {
 	private Text tdroite;
 	private Player player;
 	private boolean libre;
+	private Stage primaryStage;
 	@Override
 	public void start(Stage primaryStage) {
-
-		libre=true;
+       	this.primaryStage=primaryStage;
+		ecranfin();
+		/* libre=true;
 		StackPane root=new StackPane();
 		root.setAlignment(Pos.CENTER);
 		VBox col=new VBox();
@@ -94,7 +97,7 @@ public class Interface extends Application {
                     player = new Player(nom.getText(), scan.nextInt(), a.getText());
                     System.out.println(player.getPseudo() + "  " + player.getAge() + "  " + player.getSexe());
                     scan.close();
-                    jouer(primaryStage);
+                    jouer();
                 }
 			}
 		});
@@ -115,12 +118,12 @@ public class Interface extends Application {
 		root.getChildren().add(col);
 		Scene scene = new Scene(root,750,800);
 		primaryStage.setScene(scene);
-		primaryStage.show();
+	*/	primaryStage.show();
 	}
 
 
 
-	public void jouer(Stage primaryStage){
+	public void jouer(){
 		jeu=new Game(player);
 		player.setHealthStrt(jeu.getHealth());
 		player.setMoneyStrt(jeu.getMoney());
@@ -229,38 +232,96 @@ public class Interface extends Application {
 		choix.add(image,1,0);
 	}
 
-	private void ecranfin(Stage primaryStage){
+	private void ecranfin(){
 		StackPane root=new StackPane();
-
+        VBox col=new VBox();
+        col.setAlignment(Pos.CENTER);
+        Text mes=new Text("Merci d'avoir joué");
+		mes.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+		Text score=new Text("Votre score est de : -argent "+/*player.getMoneyEnd()+*/"   -bonheur "/*+player.getHealthEnd()*/);
+		score.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+		HBox buttons=new HBox();
+		buttons.setSpacing(50);
+		buttons.setAlignment(Pos.CENTER);
+		Button exit=new Button("exit");
+		exit.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+		exit.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
+				"   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
+				"   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
+		);
+		exit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				exit();
+			}
+		});
+		Button hist=new Button("Creer son histoire ");
+		hist.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
+				"   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
+				"   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
+		);
+		hist.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+		hist.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				creation();
+			}
+		});
+		Button rejouer=new Button("rejouer");
+		rejouer.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
+				"   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
+				"   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
+		);
+		rejouer.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
+		rejouer.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				start(primaryStage);
+			}
+		});
+		hist.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 15));
 		Scene scene = new Scene(root,750,800);
 		primaryStage.setScene(scene);
+		col.setSpacing(50);
+		buttons.getChildren().addAll(hist,rejouer,exit);
+		col.getChildren().addAll(mes,score,buttons);
+		root.getChildren().add(col);
 	}
 
+	public void creation(){
 
+	}
 	private void animationgauche(){
 		if(libre) {
 			libre=false;
 			jeu.chooseLeft();
-			Rotate rotation = new Rotate(0, 200, 1000);
-			image.getTransforms().add(rotation);
+			System.out.println(jeu.isEnded()+"  "+jeu.getTurn());
+			if(jeu.isEnded()){
+			    ecranfin();
+            }
+			else {
+                Rotate rotation = new Rotate(0, 200, 1000);
+                image.getTransforms().add(rotation);
 
-			Timeline timeline = new Timeline();
-			timeline.getKeyFrames().addAll(
-					new KeyFrame(new Duration(700), new KeyValue(rotation.angleProperty(), -90))
-			);
-			timeline.setCycleCount(1);
-			timeline.setOnFinished(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					choix.getChildren().remove(4);
-					actualiserSituation();
-					choix.add(image, 1, 0);
-					Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
-					libre=true;
+                Timeline timeline = new Timeline();
+                timeline.getKeyFrames().addAll(
+                        new KeyFrame(new Duration(700), new KeyValue(rotation.angleProperty(), -90))
+                );
+                timeline.setCycleCount(1);
+                timeline.setOnFinished(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        choix.getChildren().remove(4);
+                        actualiserSituation();
+                        choix.add(image, 1, 0);
+                        Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(), player.getId(), jeu.getHealth(), jeu.getMoney()));
+                        libre = true;
 
-				}
-			});
-			timeline.play();
+                    }
+
+                });
+                timeline.play();
+            }
 		}
 
 	}
@@ -268,29 +329,34 @@ public class Interface extends Application {
 	private void animationdroite(){
 		if(libre) {
 
-			libre = false;
-			jeu.chooseRight();
-			Rotate rotation = new Rotate(0, 200, 1000);
-			image.getTransforms().add(rotation);
-			Timeline timeline = new Timeline();
-			timeline.getKeyFrames().addAll(
-					new KeyFrame(new Duration(700), new KeyValue(rotation.angleProperty(), +90))
-			);
-			timeline.setCycleCount(1);
-			timeline.setOnFinished(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					choix.getChildren().remove(4);
-					actualiserSituation();
-					choix.add(image, 1, 0);
-					libre=true;
-					Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
+            libre = false;
+            jeu.chooseRight();
+			System.out.println(jeu.isEnded()+"  "+jeu.getTurn());
+            if (jeu.isEnded()) {
+                ecranfin();
+            } else {
+                Rotate rotation = new Rotate(0, 200, 1000);
+                image.getTransforms().add(rotation);
+                Timeline timeline = new Timeline();
+                timeline.getKeyFrames().addAll(
+                        new KeyFrame(new Duration(700), new KeyValue(rotation.angleProperty(), +90))
+                );
+                timeline.setCycleCount(1);
+                timeline.setOnFinished(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        choix.getChildren().remove(4);
+                        actualiserSituation();
+                        choix.add(image, 1, 0);
+                        libre = true;
+                        Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(), player.getId(), jeu.getHealth(), jeu.getMoney()));
 
-				}
-			});
+                    }
+                });
 
-			timeline.play();
-		}
+                timeline.play();
+            }
+        }
 
 	}
 
@@ -300,6 +366,12 @@ public class Interface extends Application {
 			imagesituation = new Image(new FileInputStream("./ressources/images/"+jeu.getCurrentSituation().getImage()));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			try {
+				imagesituation = new Image(new FileInputStream("./ressources/images/choix"));
+			}
+			catch (FileNotFoundException ex){
+				ex.printStackTrace();
+			}
 		}
 		System.out.println(jeu.getCurrentSituation().getQuestion());
 		image = new ImageView(imagesituation);

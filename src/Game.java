@@ -6,6 +6,15 @@ public class Game {
 
 	private int money;
     private int health;
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
+
     private int turn;
     private Player player;
 
