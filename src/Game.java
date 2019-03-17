@@ -3,11 +3,15 @@ public class Game {
     protected double money;
     protected double health;
     protected int turn;
+    private Player player;
 
-    public Game() {
+    public Game(Player nplayer) {
         money = 50;
         health = 50;
         turn=1;
+        player = nplayer;
+        player.setArgentDep(money);
+        player.setVieDep(health);
         currentSituation = Database.getSituation(Database.getRandom(turn),turn);
     }
 
@@ -25,8 +29,12 @@ public class Game {
             if(turn>10) {
                 // todo: afficher la fin puis retour au menu principal
                 System.out.println(String.format("money : %f ; health : %f",money,health));
+                player.setVieFin(health);
+                player.setArgentFin(money);
+                Database.insertPlayer(player);
+            }else {
+                currentSituation = Database.getSituation(Database.getRandom(turn), turn);
             }
-            currentSituation = Database.getSituation(Database.getRandom(turn),turn);
         } else {
             currentSituation = Database.getSituation(nextId, 11);
         }
