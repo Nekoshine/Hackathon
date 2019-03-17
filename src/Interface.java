@@ -4,8 +4,11 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -23,6 +26,7 @@ import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static java.lang.Double.min;
@@ -44,7 +48,8 @@ public class Interface extends Application {
 	@Override
 	public void start(Stage primaryStage) {
        	this.primaryStage=primaryStage;
-		 libre=true;
+//		ecranfin();
+		libre=true;
 		StackPane root=new StackPane();
 		root.setAlignment(Pos.CENTER);
 		VBox col=new VBox();
@@ -97,7 +102,9 @@ public class Interface extends Application {
                     player = new Player(nom.getText(), scan.nextInt(), a.getText());
                     System.out.println(player.getPseudo() + "  " + player.getAge() + "  " + player.getSexe());
                     scan.close();
-                    jouer();
+                    //jouer();
+                    //jouer(primaryStage);
+					choisirHistoire(primaryStage);
                 }
 			}
 		});
@@ -121,6 +128,43 @@ public class Interface extends Application {
 		primaryStage.show();
 	}
 
+
+
+	public void choisirHistoire(Stage primaryStage) {
+        libre = true;
+        StackPane root = new StackPane();
+        root.setAlignment(Pos.CENTER);
+        Label labelTitle = new Label("Choisisser votre histoire :");
+        ArrayList<String> storiesName = Database.getStoriesName();
+        ObservableList<String> stories = FXCollections.observableArrayList(storiesName);
+        ListView<String> lview = new ListView<>(stories);
+        lview.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        lview.getSelectionModel().selectFirst();
+        Button start = new Button("Start");
+        start.setPrefSize(100, 50);
+        start.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        start.setStyle("   -fx-text-fill: rgb(0,0,0);\n" +
+                "   -fx-background-color: linear-gradient(#ff7b06, #994f00);\n" +
+                "   -fx-effect: dropshadow( three-pass-box , rgb(0,1,0) , 5, 0.0 , 0 , 1 );\n"
+        );
+        start.setAlignment(Pos.CENTER);
+
+        start.setOnAction(event -> {
+
+        });
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setVgap(15);
+        grid.setPadding(new Insets(20));
+        grid.add(labelTitle, 0, 0);
+        grid.add(lview, 0, 1);
+        grid.add(start, 0, 3);
+
+        root.getChildren().add(grid);
+        Scene scene = new Scene(root, 750, 800);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
 
 
 	public void jouer(){

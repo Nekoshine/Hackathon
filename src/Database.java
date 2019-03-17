@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Database {
@@ -172,6 +173,24 @@ public class Database {
 			System.err.println("Erreur connextion : " + e.getMessage());
 		}
 		return null;
-	}	
+	}
+
+	public static ArrayList<String> getStoriesName() {
+		try {
+			PreparedStatement requete= Database.getConnexion()
+					.prepareStatement("Select Name from Histoire");
+			ResultSet resultat = requete.executeQuery();
+			ArrayList<String> stories = new ArrayList<>();
+			while (resultat.next()) {
+				stories.add(resultat.getString("Name"));
+			}
+			requete.close();
+			resultat.close();
+			return stories;
+		}catch (SQLException e) {
+			System.err.println("Erreur connextion : " + e.getMessage());
+		}
+		return null;
+	}
 		
 }
