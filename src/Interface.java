@@ -76,6 +76,7 @@ public class Interface extends Application {
 				jouer(primaryStage);
 			}
 		});
+		
 		col.getChildren().addAll(gnom,gradio,gage,start);
 		try {
 			Image imgf = new Image(new FileInputStream("./ressources/images/fond.png"));
