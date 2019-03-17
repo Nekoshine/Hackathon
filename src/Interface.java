@@ -43,6 +43,7 @@ public class Interface extends Application {
 	private Text tgauche;
 	private Text tdroite;
 	private Player player;
+	private Boolean lean;
 	private boolean libre;
 	private Stage primaryStage;
 	@Override
@@ -164,6 +165,7 @@ public class Interface extends Application {
 
 
 	public void jouer(){
+		lean=false;
 		jeu=new Game(player, histoire);
 		player.setHealthStrt(jeu.getHealth());
 		player.setMoneyStrt(jeu.getMoney());
@@ -191,10 +193,63 @@ public class Interface extends Application {
 			ImageView gauche = new ImageView(imgg);
 			gauche.setFitHeight(150);
 			gauche.setFitWidth(220);
+
+			gauche.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET,event -> {
+				lean=true;
+				Rotate rotation = new Rotate(0, 200, 1000);
+				image.getTransforms().add(rotation);
+
+				Timeline timeline = new Timeline();
+				timeline.getKeyFrames().addAll(
+						new KeyFrame(new Duration(200), new KeyValue(rotation.angleProperty(), -4))
+				);
+				timeline.play();
+
+			});
+			gauche.addEventHandler(MouseEvent.MOUSE_EXITED_TARGET,event -> {
+				if(lean) {
+					Rotate rotation = new Rotate(0, 200, 1000);
+					image.getTransforms().add(rotation);
+
+					Timeline timeline = new Timeline();
+					timeline.getKeyFrames().addAll(
+							new KeyFrame(new Duration(200), new KeyValue(rotation.angleProperty(), 4))
+					);
+					timeline.play();
+					lean=false;
+				}
+
+			});
 			Image imgd = new Image(new FileInputStream("./ressources/images/droite.png"));
 			ImageView droite = new ImageView(imgd);
 			droite.setFitHeight(150);
 			droite.setFitWidth(220);
+			droite.addEventHandler(MouseEvent.MOUSE_ENTERED_TARGET,event -> {
+				lean=true;
+				Rotate rotation = new Rotate(0, 200, 1000);
+				image.getTransforms().add(rotation);
+
+				Timeline timeline = new Timeline();
+				timeline.getKeyFrames().addAll(
+						new KeyFrame(new Duration(200), new KeyValue(rotation.angleProperty(), 4))
+				);
+				timeline.play();
+
+			});
+			droite.addEventHandler(MouseEvent.MOUSE_EXITED_TARGET,event -> {
+				if(lean) {
+					Rotate rotation = new Rotate(0, 200, 1000);
+					image.getTransforms().add(rotation);
+
+					Timeline timeline = new Timeline();
+					timeline.getKeyFrames().addAll(
+							new KeyFrame(new Duration(200), new KeyValue(rotation.angleProperty(), -4))
+					);
+					timeline.play();
+					lean=false;
+				}
+
+			});
 			imagesituation = new Image(new FileInputStream("./ressources/images/choix.png"));
 			image= new ImageView(imagesituation);
 
@@ -352,6 +407,7 @@ public class Interface extends Application {
                         choix.add(image, 1, 0);
                         Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(), player.getId(), jeu.getHealth(), jeu.getMoney()));
                         libre = true;
+                        lean=false;
 
                     }
 
@@ -385,6 +441,7 @@ public class Interface extends Application {
                         actualiserSituation();
                         choix.add(image, 1, 0);
                         libre = true;
+                        lean=false;
                         Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(), player.getId(), jeu.getHealth(), jeu.getMoney()));
 
                     }
