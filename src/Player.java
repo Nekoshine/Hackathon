@@ -2,10 +2,10 @@ public class Player {
     private String Pseudo;
     private int Age;
     private String Sexe;
-    private double ArgentDep;
-    private double ArgentFin;
-    private double VieDep;
-    private double VieFin;
+    private int ArgentDep;
+    private int ArgentFin;
+    private int VieDep;
+    private int VieFin;
 
 
 
@@ -15,19 +15,19 @@ public class Player {
         Sexe = sexe;
     }
 
-    public void setArgentDep(double argentDep) {
+    public void setArgentDep(int argentDep) {
         ArgentDep = argentDep;
     }
 
-    public void setVieDep(double vieDep) {
+    public void setVieDep(int vieDep) {
         VieDep = vieDep;
     }
 
-    public void setArgentFin(double argentFin) {
+    public void setArgentFin(int argentFin) {
         ArgentFin = argentFin;
     }
 
-    public void setVieFin(double vieFin) {
+    public void setVieFin(int vieFin) {
         VieFin = vieFin;
     }
 
@@ -43,19 +43,19 @@ public class Player {
         return Sexe;
     }
 
-    public double getArgentDep() {
+    public int getArgentDep() {
         return ArgentDep;
     }
 
-    public double getArgentFin() {
+    public int getArgentFin() {
         return ArgentFin;
     }
 
-    public double getVieDep() {
+    public int getVieDep() {
         return VieDep;
     }
 
-    public double getVieFin() {
+    public int getVieFin() {
         return VieFin;
     }
 }
