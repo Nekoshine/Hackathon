@@ -1,6 +1,5 @@
 public class Game {
     protected Question currentSituation;
-    protected Categorie categorie;
     protected double money;
     protected double health;
     protected int turn;
