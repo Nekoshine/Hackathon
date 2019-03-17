@@ -46,7 +46,7 @@ public class Game {
     private void nextSituation(int nextId) {
         if(nextId==0) {
             turn++;
-            if(turn>10) {
+            if(isEnded()) {
                 // todo: afficher la fin puis retour au menu principal
                 player.setHealthEnd(health);
                 player.setMoneyEnd(money);
