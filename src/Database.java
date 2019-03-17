@@ -192,5 +192,23 @@ public class Database {
 		}
 		return null;
 	}
+
+	public static ArrayList<String> getQuestionsName() {
+		try {
+			PreparedStatement requete= Database.getConnexion()
+					.prepareStatement("Select Texte from Question");
+			ResultSet resultat = requete.executeQuery();
+			ArrayList<String> stories = new ArrayList<>();
+			while (resultat.next()) {
+				stories.add(resultat.getString("Texte"));
+			}
+			requete.close();
+			resultat.close();
+			return stories;
+		}catch (SQLException e) {
+			System.err.println("Erreur connextion : " + e.getMessage());
+		}
+		return null;
+	}
 		
 }

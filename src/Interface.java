@@ -46,10 +46,13 @@ public class Interface extends Application {
 	private Boolean lean;
 	private boolean libre;
 	private Stage primaryStage;
+
 	@Override
 	public void start(Stage primaryStage) {
        	this.primaryStage=primaryStage;
-//		ecranfin();
+
+		createStory();
+/*
 		libre=true;
 		StackPane root=new StackPane();
 		root.setAlignment(Pos.CENTER);
@@ -100,7 +103,7 @@ public class Interface extends Application {
                     scan.close();
                     //jouer();
                     //jouer(primaryStage);
-					choisirHistoire(primaryStage);
+					choisirHistoire();
                 }
 			}
 		});
@@ -121,13 +124,123 @@ public class Interface extends Application {
 		root.getChildren().add(col);
 		Scene scene = new Scene(root,750,800);
 		primaryStage.setScene(scene);
+		primaryStage.show();*/
+	}
+
+	public void createStory() {
+		StackPane root = new StackPane();
+		root.setAlignment(Pos.CENTER);
+
+		Label labelTitle = new Label("Remplisser votre histoire (10 questions) :");
+
+
+		ObservableList<String> storiesL = FXCollections.observableArrayList(Database.getQuestionsName());
+		ListView<String> lviewLeft = new ListView<>(storiesL);
+		lviewLeft.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		lviewLeft.getSelectionModel().selectFirst();
+
+		ObservableList<String> storiesR = FXCollections.observableArrayList();
+		ListView<String> lviewRight = new ListView<>(storiesR);
+		lviewRight.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		lviewRight.getSelectionModel().selectFirst();
+
+		Button toRight = new Button(">");
+		Button toLeft = new Button("<");
+		Button allLeft = new Button("<<");
+		toLeft.setPrefWidth(100);
+		toRight.setPrefWidth(100);
+		allLeft.setPrefWidth(100);
+
+		Button moveUp = new Button("Move up");
+		Button moveDown = new Button("Move down");
+		moveDown.setPrefWidth(200);
+		moveUp.setPrefWidth(200);
+
+		Button commit = new Button("Commit");
+
+
+		toRight.setOnAction(event -> {
+			if(lviewRight.getItems().size()<10) {
+				int index = lviewLeft.getSelectionModel().getSelectedIndex();
+				lviewRight.getItems().add(lviewLeft.getItems().remove(index));
+				lviewLeft.getSelectionModel().select(index);
+			}
+		});
+
+		toLeft.setOnAction(event -> {
+			if(lviewRight.getItems().size()>0) {
+				lviewLeft.getItems().add(lviewRight.getItems().remove(lviewRight.getSelectionModel().getSelectedIndex()));
+			}
+		});
+
+		allLeft.setOnAction(event -> {
+			while(lviewRight.getItems().size()>0) {
+				lviewLeft.getItems().add(lviewRight.getItems().remove(0));
+			}
+		});
+
+		moveUp.setOnAction(event -> {
+			String tmp = lviewRight.getSelectionModel().getSelectedItem();
+			int index = lviewRight.getSelectionModel().getSelectedIndex();
+			if (index>0){
+				lviewRight.getItems().remove(index);
+				lviewRight.getItems().add(index-1,tmp);
+				lviewRight.getSelectionModel().select(index-1);
+			}
+		});
+
+		moveDown.setOnAction(event -> {
+			String tmp = lviewRight.getSelectionModel().getSelectedItem();
+			int index = lviewRight.getSelectionModel().getSelectedIndex();
+			if (index<lviewRight.getItems().size()-1){
+				lviewRight.getItems().remove(index);
+				lviewRight.getItems().add(index+1,tmp);
+				lviewRight.getSelectionModel().select(index+1);
+			}
+		});
+
+
+		commit.setOnAction(event -> {
+
+		});
+
+
+		GridPane grid = new GridPane();
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(15);
+		grid.setVgap(15);
+		grid.setPadding(new Insets(20));
+		grid.add(labelTitle, 0, 0,6,1);
+		grid.add(lviewLeft, 0, 1,2,5);
+		grid.add(lviewRight, 3, 1,2,5);
+
+		GridPane grid2 = new GridPane();
+		grid2.add(toRight,0,0);
+		grid2.add(toLeft,0,1);
+		grid2.add(allLeft,0,2);
+		grid2.setHgap(15);
+		grid2.setVgap(15);
+		grid2.setPadding(new Insets(20));
+		grid2.setAlignment(Pos.CENTER);
+
+		GridPane grid3 = new GridPane();
+		grid3.add(moveUp,0,0);
+		grid3.add(moveDown,0,2);
+		grid3.setHgap(15);
+		grid3.setVgap(15);
+		grid3.setPadding(new Insets(20));
+		grid3.setAlignment(Pos.CENTER);
+		grid.add(grid2,2,1,1,5);
+		grid.add(grid3,5,1,1,5);
+		grid.add(commit, 1, 6);
+
+		root.getChildren().add(grid);
+		Scene scene = new Scene(root, 1200, 800);
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
-
-
-	public void choisirHistoire(Stage primaryStage) {
-        libre = true;
+	public void choisirHistoire() {
         StackPane root = new StackPane();
         root.setAlignment(Pos.CENTER);
         Label labelTitle = new Label("Choisisser votre histoire :");
