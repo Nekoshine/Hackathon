@@ -48,7 +48,6 @@ public class Game {
             turn++;
             if(turn>10) {
                 // todo: afficher la fin puis retour au menu principal
-                //System.out.println(String.format("money : %f ; health : %f",money,health));
                 player.setHealthEnd(health);
                 player.setMoneyEnd(money);
                 Database.insertPlayer(player);
