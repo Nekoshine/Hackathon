@@ -37,6 +37,7 @@ public class Interface extends Application {
 	private Text tgauche;
 	private Text tdroite;
 	private Player player;
+
 	@Override
 	public void start(Stage primaryStage) {
 		StackPane root=new StackPane();
@@ -64,10 +65,7 @@ public class Interface extends Application {
 		rb3.setToggleGroup(toggleGroup );
 		gradio.getChildren().addAll(rb1,rb2,rb3);
 		Button start=new Button("Start");
-		start.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
+		start.setOnAction((ActionEvent event) -> {
 				Scanner scan =new Scanner(age.getText());
 				ToggleButton a=(ToggleButton) toggleGroup.getSelectedToggle();
 				player=new Player(nom.getText(),scan.nextInt(),a.getText());
@@ -75,7 +73,7 @@ public class Interface extends Application {
 				scan.close();
 				jouer(primaryStage);
 			}
-		});
+		);
 		
 		col.getChildren().addAll(gnom,gradio,gage,start);
 		try {
@@ -138,12 +136,12 @@ public class Interface extends Application {
 				public void handle(KeyEvent event) {
 					if(event.getCode()==KeyCode.RIGHT){
 						jeu.chooseRight();
-						animationdroite();
+						animationDroite();
 						
 					}
 					if(event.getCode()==KeyCode.LEFT){
 						jeu.chooseLeft();
-						animationgauche();
+						animationGauche();
 						
 					}
 				}
@@ -152,7 +150,7 @@ public class Interface extends Application {
 				@Override
 				public void handle(MouseEvent event) {
 					jeu.chooseRight();
-					animationdroite();Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
+					animationDroite();Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
 					
 				}
 			});
@@ -160,7 +158,7 @@ public class Interface extends Application {
 				@Override
 				public void handle(MouseEvent event) {
 					jeu.chooseLeft();
-					animationgauche();Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
+					animationGauche();Database.insertAnswer(new Answer(jeu.getCurrentSituation().getId(),player.getId(),jeu.getHealth(),jeu.getMoney()));
 					
 				}
 			});
@@ -209,7 +207,7 @@ public class Interface extends Application {
 	}
 
 
-	private void animationgauche(){
+	private void animationGauche(){
 		Rotate rotation = new Rotate(0, imagesituation.getWidth()/2, imagesituation.getHeight()*2.5);
 		image.getTransforms().add(rotation);
 
@@ -231,7 +229,7 @@ public class Interface extends Application {
 
 	}
 
-	private void animationdroite(){
+	private void animationDroite(){
 		Rotate rotation = new Rotate(0, imagesituation.getWidth()/2, imagesituation.getHeight()*2.5);
 		image.getTransforms().add(rotation);
 		Timeline timeline = new Timeline();
