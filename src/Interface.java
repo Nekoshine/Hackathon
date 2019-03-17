@@ -150,7 +150,8 @@ public class Interface extends Application {
         start.setAlignment(Pos.CENTER);
 
         start.setOnAction(event -> {
-
+            histoire = Database.getStory(lview.getSelectionModel().getSelectedIndex()+1);
+            jouer();
         });
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -168,7 +169,6 @@ public class Interface extends Application {
 
 
 	public void jouer(){
-		histoire = Database.getStory(1);
 		jeu=new Game(player, histoire);
 		player.setHealthStrt(jeu.getHealth());
 		player.setMoneyStrt(jeu.getMoney());
