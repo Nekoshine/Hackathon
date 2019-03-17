@@ -22,7 +22,7 @@ public class Database {
 		if (connexion == null) {
 			try {
 				System.out.println("Initialising connection to Database");
-				Database.connexion = DriverManager.getConnection("jdbc:mysql://remotemysql.com/","unZgwZdVHJ", "9QMg89jteB");
+				Database.connexion = DriverManager.getConnection("jdbc:mysql://remotemysql.com/unZgwZdVHJ","unZgwZdVHJ", "9QMg89jteB");
 				System.out.println("Connection to Hostel Database complete");
 				return connexion;
 			} catch (SQLException e) {
