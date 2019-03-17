@@ -73,7 +73,23 @@ public class Database {
 		return null;
 	}
 
-	public static void main(String[] args) {
-		Database.getConnexion();
+	public static boolean insertAnswer(Answer answer) {
+		try {
+			PreparedStatement requete = Database.getConnexion()
+					.prepareStatement("INSERT INTO Reponse VALUES (?,?,?,?,?,?)");
+			requete.setInt(1, answer.getAnswerNumber());
+			requete.setInt(2, answer.getPlayerNumber());
+			requete.setInt(3, answer.getQuestionNumber());
+			requete.setInt(4, answer.getHealth());
+			requete.setInt(5, answer.getMoney());
+			requete.setInt(6, answer.getStatus());
+			ResultSet resultat = requete.executeQuery();
+			requete.close();
+			resultat.close();
+			return true;
+		} catch (SQLException e) {
+			System.err.println("Erreur connexion : " + e.getMessage());
+		}
+		return false;
 	}
 }
