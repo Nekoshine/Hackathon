@@ -1,9 +1,9 @@
 public class Question {
-    private int id;
-    private String question;
-    private Choice rightChoice;
-    private Choice leftChoice;
-    private String image;
+    protected int id;
+    protected String question;
+    protected Choice rightChoice;
+    protected Choice leftChoice;
+    protected String image;
     
     public Question(int id, String question, Choice rightChoice, Choice leftChoice,String image) {
         this.id = id;
@@ -24,14 +24,14 @@ public class Question {
     }
 
     public int chooseLeft(Game game){
-        game.setHealth(game.getHealth() + leftChoice.getHealthCost());
-        game.setMoney(game.getMoney() + leftChoice.getMoneyCost());
+        game.health += leftChoice.getHealthCost();
+        game.money += leftChoice.getMoneyCost();
         return leftChoice.getEnding();
     }
 
     public int chooseRight(Game game){
-        game.setHealth(game.getHealth() + rightChoice.getHealthCost());
-        game.setMoney(game.getMoney() + rightChoice.getMoneyCost());
+        game.health += rightChoice.getHealthCost();
+        game.money += rightChoice.getMoneyCost();
         return rightChoice.getEnding();
     }
 

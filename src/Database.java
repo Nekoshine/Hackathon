@@ -61,8 +61,8 @@ public class Database {
 			ResultSet resultat = requete.executeQuery();
 			resultat.next();
 			Question situation = new Question(resultat.getInt("IDQuestion"), resultat.getString("Texte"),
-						new Choice(resultat.getInt("NextD"),resultat.getInt("ArgentD"),resultat.getInt("VieD"),resultat.getString("TextG")),
-						new Choice(resultat.getInt("NextG"),resultat.getInt("ArgentG"),resultat.getInt("VieG"),resultat.getString("TextD")),
+						new Choice(resultat.getInt("NextD"),resultat.getInt("ArgentD"),resultat.getInt("VieD"),resultat.getString("TexteD")),
+						new Choice(resultat.getInt("NextG"),resultat.getInt("ArgentG"),resultat.getInt("VieG"),resultat.getString("TexteG")),
 								resultat.getString("image"));
 			requete.close();
 			resultat.close();
